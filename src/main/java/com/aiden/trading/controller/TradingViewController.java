@@ -1,22 +1,28 @@
 package com.aiden.trading.controller;
 
 import com.aiden.trading.constant.TradingViewConstant;
+import com.aiden.trading.dto.TvResult;
+import com.aiden.trading.dto.tradingview.StudyTemplateInfo;
 import com.aiden.trading.dto.tradingview.req.SaveChartReq;
+import com.aiden.trading.dto.tradingview.req.SaveStudyTemplateReq;
 import com.aiden.trading.dto.tradingview.resp.*;
+import com.aiden.trading.service.ITvStudyTemplateInfoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequestMapping("/tradingview")
 @Tag(name = "tradingview接口")
 @CrossOrigin
 public class TradingViewController {
+
+    @Resource
+    private ITvStudyTemplateInfoService tvStudyTemplateInfoService;
     @GetMapping("/config")
     public ConfigurationResp config() {
         ConfigurationResp configurationResp = new ConfigurationResp();
@@ -33,26 +39,24 @@ public class TradingViewController {
 
     /**
      * GET /charts_storage_api_version/study_templates?client=client_id&user=user_id
+     * GET /charts_storage_api_version/study_tempates?client=client_id&user=user_id&chart=chart_id&template=name
+     * template：模板名称
      * status	ok or error
      * data	Array of objects where each object has a name property representing the template name (example: Test)
      *
-     * @return
      */
     @GetMapping("/1.0/study_templates")
-    public Object studyTemplatesV1(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "template",required = false) String template) {
-        if (Objects.nonNull(template)) {
-            GetStudyTemplateResp ret = new GetStudyTemplateResp();
+    public TvResult<?> studyTemplatesV1(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "template",required = false) String template) {
+        if (StringUtils.isNoneBlank(template)) {
+            TvResult<StudyTemplateInfo> ret = new TvResult<>();
+            StudyTemplateInfo studyTemplateInfo = tvStudyTemplateInfoService.getByName(template,user,client);
             ret.setStatus(TradingViewConstant.Ok);
-            GetStudyTemplateResp.DataDTO data = new GetStudyTemplateResp.DataDTO();
-            data.setName("he;");
-            ret.setData(data);
+            ret.setData(studyTemplateInfo);
             return ret;
         }
-        GetStudyTemplatesResp ret = new GetStudyTemplatesResp();
+        TvResult<List<Map<String,Object>>> ret = new TvResult<>();
         ret.setStatus(TradingViewConstant.Ok);
-        GetStudyTemplatesResp.DataDTO data = new GetStudyTemplatesResp.DataDTO();
-        data.setName("he;");
-        ret.setData(List.of(data));
+        ret.setData(tvStudyTemplateInfoService.getStudyTemplateNames(user,client));
         return ret;
     }
 
@@ -62,13 +66,11 @@ public class TradingViewController {
      * status	ok or error
      * data	Array of objects where each object has a name property representing the template name (example: Test)
      *
-     * @return
      */
     @PostMapping("/1.0/study_templates")
-    public SaveOrUpdateChartsResp postStudyTemplatesV1(@RequestParam("client") String client, @RequestParam("user") String user,@RequestParam("name") String name,@RequestParam("content") String content) {
-        SaveOrUpdateChartsResp ret = new SaveOrUpdateChartsResp();
-        ret.setStatus(TradingViewConstant.Ok);
-        return ret;
+    public TvResult<?> postStudyTemplatesV1(SaveStudyTemplateReq saveStudyTemplateReq) {
+        tvStudyTemplateInfoService.saveStudyTemplate(saveStudyTemplateReq);
+        return TvResult.ok();
     }
     /**
      * delete /charts_storage_api_version/charts?client=client_id&user=user_id
@@ -78,10 +80,9 @@ public class TradingViewController {
      * @return
      */
     @DeleteMapping("/1.0/study_templates")
-    public DeleteChartsResp deleteStudyTemplatesV1(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam("chart") Integer chart) {
-        DeleteChartsResp ret = new DeleteChartsResp();
-        ret.setStatus(TradingViewConstant.Ok);
-        return ret;
+    public TvResult<?> deleteStudyTemplatesV1(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam("template") String template) {
+        tvStudyTemplateInfoService.deleteStudyTemplateByName(client,user,template);
+        return TvResult.ok();
     }
 
     /**
