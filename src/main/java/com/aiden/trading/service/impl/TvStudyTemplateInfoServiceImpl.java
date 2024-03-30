@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -36,7 +35,7 @@ public class TvStudyTemplateInfoServiceImpl extends ServiceImpl<TvStudyTemplateI
         if (Objects.nonNull(tvStudyTemplateInfo)) {
             StudyTemplateInfo ret = new StudyTemplateInfo();
             ret.setName(tvStudyTemplateInfo.getName());
-            ret.setContent(Arrays.toString(tvStudyTemplateInfo.getContent()));
+            ret.setContent(new String(tvStudyTemplateInfo.getContent()));
             return ret;
         }
         return null;

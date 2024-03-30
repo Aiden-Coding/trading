@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +27,7 @@ public class TvChartInfoServiceImpl extends ServiceImpl<TvChartInfoDao, TvChartI
 
     @Override
     public ChartInfo getChartInfoById(Integer chart, String user, String client) {
-        LambdaQueryWrapper<TvChartInfo> queryWrapper = new LambdaQueryWrapper<>() ;
+        LambdaQueryWrapper<TvChartInfo> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(TvChartInfo::getId, chart);
         queryWrapper.eq(TvChartInfo::getUser, user);
         queryWrapper.eq(TvChartInfo::getClient, client);
@@ -36,7 +35,7 @@ public class TvChartInfoServiceImpl extends ServiceImpl<TvChartInfoDao, TvChartI
         if (Objects.nonNull(tvStudyTemplateInfo)) {
             ChartInfo ret = new ChartInfo();
             ret.setName(tvStudyTemplateInfo.getName());
-            ret.setContent(Arrays.toString(tvStudyTemplateInfo.getContent()));
+            ret.setContent(new String(tvStudyTemplateInfo.getContent()));
             ret.setId(tvStudyTemplateInfo.getId());
             ret.setTimestamp(tvStudyTemplateInfo.getTimestamp());
             return ret;
@@ -47,12 +46,8 @@ public class TvChartInfoServiceImpl extends ServiceImpl<TvChartInfoDao, TvChartI
 
     @Override
     public List<Map<String, Object>> getChartInfos(String user, String client) {
-        LambdaQueryWrapper<TvChartInfo> queryWrapper = new LambdaQueryWrapper<>() ;
-        queryWrapper.select(TvChartInfo::getId)
-                .select(TvChartInfo::getName)
-                .select(TvChartInfo::getResolution)
-                .select(TvChartInfo::getTimestamp)
-                .select(TvChartInfo::getSymbol);
+        LambdaQueryWrapper<TvChartInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(TvChartInfo::getId, TvChartInfo::getName, TvChartInfo::getSymbol, TvChartInfo::getResolution, TvChartInfo::getTimestamp);
         queryWrapper.eq(TvChartInfo::getUser, user);
         queryWrapper.eq(TvChartInfo::getClient, client);
         return baseMapper.selectMaps(queryWrapper);
@@ -74,6 +69,7 @@ public class TvChartInfoServiceImpl extends ServiceImpl<TvChartInfoDao, TvChartI
                 tvChartInfo.setName(saveChartReq.getName());
                 tvChartInfo.setClient(saveChartReq.getClient());
                 tvChartInfo.setUser(saveChartReq.getUser());
+                tvChartInfo.setTimestamp((int) (System.currentTimeMillis()/1000));
                 baseMapper.updateById(tvChartInfo);
                 return tvChartInfo;
             }
@@ -84,6 +80,7 @@ public class TvChartInfoServiceImpl extends ServiceImpl<TvChartInfoDao, TvChartI
         tvChartInfo.setName(saveChartReq.getName());
         tvChartInfo.setClient(saveChartReq.getClient());
         tvChartInfo.setUser(saveChartReq.getUser());
+        tvChartInfo.setTimestamp((int) (System.currentTimeMillis()/1000));
         tvChartInfo.setContent(saveChartReq.getContent().getBytes());
         baseMapper.insert(tvChartInfo);
         return tvChartInfo;
@@ -91,9 +88,9 @@ public class TvChartInfoServiceImpl extends ServiceImpl<TvChartInfoDao, TvChartI
 
     @Override
     public void deleteChart(String client, String user, Integer chart) {
-        LambdaQueryWrapper<TvChartInfo> queryWrapper = new LambdaQueryWrapper<>() ;
+        LambdaQueryWrapper<TvChartInfo> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(TvChartInfo::getId, chart);
-        queryWrapper.eq(TvChartInfo::getUser,user);
+        queryWrapper.eq(TvChartInfo::getUser, user);
         queryWrapper.eq(TvChartInfo::getClient, client);
         baseMapper.delete(queryWrapper);
     }

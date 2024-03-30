@@ -125,9 +125,14 @@ public class TradingViewController {
      *
      */
     @PostMapping("/1.0/charts")
-    public TvResult<?> postCharts( SaveChartReq saveChartReq) {
+    public Map<String,Object> postCharts( SaveChartReq saveChartReq) {
         TvChartInfo tvChartInfo = tvChartInfoService.saveChart(saveChartReq);
-        return TvResult.ok(Map.of("id",tvChartInfo.getId()));
+        Map<String,Object> ret = new HashMap<>();
+        ret.put("status",TradingViewConstant.Ok);
+        if (Objects.isNull(saveChartReq.getChart())) {
+            ret.put("id", tvChartInfo.getId());
+        }
+        return ret;
     }
     /**
      * delete /charts_storage_api_version/charts?client=client_id&user=user_id
