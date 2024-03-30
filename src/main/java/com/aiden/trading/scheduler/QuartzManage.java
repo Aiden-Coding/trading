@@ -1,6 +1,7 @@
 package com.aiden.trading.scheduler;
 
-import com.aiden.trading.constant.JobState;
+import com.aiden.trading.constant.JobStateEnum;
+import com.aiden.trading.constant.Quartz;
 import com.aiden.trading.entity.QuartzJob;
 import jakarta.annotation.Resource;
 import org.quartz.*;
@@ -61,7 +62,7 @@ public class QuartzManage {
             CronTrigger trigger = TriggerBuilder.newTrigger()
                                                 .withIdentity(getTriggerKey(quartzJob.getId()))
                                                 .withSchedule(scheduleBuilder).build() ;
-            jobDetail.getJobDataMap().put(QuartzJob.JOB_PARAM_KEY,quartzJob);
+            jobDetail.getJobDataMap().put(Quartz.JOB_PARAM_KEY,quartzJob);
             scheduler.scheduleJob(jobDetail,trigger) ;
             // 状态校验
             checkStop(quartzJob) ;
@@ -85,7 +86,7 @@ public class QuartzManage {
             CronTrigger trigger = getCronTrigger(quartzJob.getId())
                                 .getTriggerBuilder().withIdentity(triggerKey)
                                 .withSchedule(scheduleBuilder).build();
-            trigger.getJobDataMap().put(QuartzJob.JOB_PARAM_KEY, quartzJob);
+            trigger.getJobDataMap().put(Quartz.JOB_PARAM_KEY, quartzJob);
             scheduler.rescheduleJob(triggerKey, trigger);
             // 状态校验
             checkStop(quartzJob) ;
@@ -122,7 +123,7 @@ public class QuartzManage {
     public void run (QuartzJob quartzJob){
         try {
             JobDataMap dataMap = new JobDataMap() ;
-            dataMap.put(QuartzJob.JOB_PARAM_KEY,quartzJob);
+            dataMap.put(Quartz.JOB_PARAM_KEY,quartzJob);
             this.scheduler.triggerJob(getJobKey(quartzJob.getId()),dataMap);
         } catch (SchedulerException e){
             throw new RuntimeException("run Fail",e) ;
@@ -134,7 +135,7 @@ public class QuartzManage {
      */
     public void checkStop (QuartzJob quartzJob){
         try {
-            if(quartzJob.getState() != JobState.JOB_RUN.getStatus()){
+            if(quartzJob.getState() != JobStateEnum.JOB_RUN.getStatus()){
                 this.scheduler.pauseJob(getJobKey(quartzJob.getId()));
             }
         } catch (SchedulerException e){

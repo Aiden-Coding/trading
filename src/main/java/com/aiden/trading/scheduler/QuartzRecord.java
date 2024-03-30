@@ -1,6 +1,7 @@
 package com.aiden.trading.scheduler;
 
-import com.aiden.trading.constant.LogState;
+import com.aiden.trading.constant.LogStateEnum;
+import com.aiden.trading.constant.Quartz;
 import com.aiden.trading.entity.QuartzJob;
 import com.aiden.trading.entity.QuartzLog;
 import com.aiden.trading.service.QuartzLogService;
@@ -19,7 +20,7 @@ public class QuartzRecord extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) {
-        QuartzJob quartzJob = (QuartzJob)context.getMergedJobDataMap().get(QuartzJob.JOB_PARAM_KEY) ;
+        QuartzJob quartzJob = (QuartzJob)context.getMergedJobDataMap().get(Quartz.JOB_PARAM_KEY) ;
         QuartzLogService quartzLogService = (QuartzLogService)SpringContextUtil.getBean("quartzLogService") ;
         // 定时器日志记录
         QuartzLog quartzLog = new QuartzLog () ;
@@ -35,12 +36,12 @@ public class QuartzRecord extends QuartzJobBean {
             method.invoke(target, quartzJob.getParams());
             long executeTime = System.currentTimeMillis() - beginTime;
             quartzLog.setTimes((int)executeTime);
-            quartzLog.setState(LogState.LOG_SUS.getStatus());
+            quartzLog.setState(LogStateEnum.LOG_SUS.getStatus());
         } catch (Exception e){
             // 异常信息
             long executeTime = System.currentTimeMillis() - beginTime;
             quartzLog.setTimes((int)executeTime);
-            quartzLog.setState(LogState.LOG_FAIL.getStatus());
+            quartzLog.setState(LogStateEnum.LOG_FAIL.getStatus());
             quartzLog.setError(e.getMessage());
         } finally {
             // 保存执行日志

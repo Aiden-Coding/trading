@@ -1,6 +1,6 @@
 package com.aiden.trading.service;
 
-import com.aiden.trading.constant.JobState;
+import com.aiden.trading.constant.JobStateEnum;
 import com.aiden.trading.entity.QuartzJob;
 import com.aiden.trading.mapper.QuartzJobMapper;
 import com.aiden.trading.mapper.QuartzLogMapper;
@@ -10,7 +10,6 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.quartz.CronTrigger;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +35,7 @@ public class QuartzJobService {
     @PostConstruct
     public void init () {
         LambdaQueryWrapper<QuartzJob> queryWrapper = new LambdaQueryWrapper<>() ;
-        queryWrapper.in(QuartzJob::getState, JobState.JOB_RUN.getStatus(),JobState.JOB_STOP.getStatus());
+        queryWrapper.in(QuartzJob::getState, JobStateEnum.JOB_RUN.getStatus(), JobStateEnum.JOB_STOP.getStatus());
         List<QuartzJob> jobList = quartzJobMapper.selectList(queryWrapper);
         jobList.forEach(quartzJob -> {
             CronTrigger cronTrigger = quartzManage.getCronTrigger(quartzJob.getId()) ;
@@ -83,7 +82,7 @@ public class QuartzJobService {
     public void pause(Integer id) {
         QuartzJob quartzJob = quartzJobMapper.selectById(id) ;
         if (!Objects.isNull(quartzJob)){
-            quartzJob.setState(JobState.JOB_STOP.getStatus());
+            quartzJob.setState(JobStateEnum.JOB_STOP.getStatus());
             if (quartzJobMapper.updateById(quartzJob)>0){
                 quartzManage.checkStop(quartzJob);
             }
@@ -96,7 +95,7 @@ public class QuartzJobService {
     public void resume(Integer id) {
         QuartzJob quartzJob = quartzJobMapper.selectById(id) ;
         if (!Objects.isNull(quartzJob)){
-            quartzJob.setState(JobState.JOB_RUN.getStatus());
+            quartzJob.setState(JobStateEnum.JOB_RUN.getStatus());
             if (quartzJobMapper.updateById(quartzJob)>0){
                 quartzManage.resumeJob(id);
             }
@@ -108,7 +107,7 @@ public class QuartzJobService {
      */
     public void runOnce(Integer id) {
         QuartzJob quartzJob = quartzJobMapper.selectById(id) ;
-        if (!Objects.isNull(quartzJob) && quartzJob.getState() != JobState.JOB_DEL.getStatus()){
+        if (!Objects.isNull(quartzJob) && quartzJob.getState() != JobStateEnum.JOB_DEL.getStatus()){
             quartzManage.run(quartzJob);
         }
     }

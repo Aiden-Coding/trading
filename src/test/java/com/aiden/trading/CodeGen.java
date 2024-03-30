@@ -1,6 +1,7 @@
 package com.aiden.trading;
 
 
+import com.aiden.trading.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
@@ -13,6 +14,7 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.fill.Column;
 import com.baomidou.mybatisplus.generator.fill.Property;
 import com.baomidou.mybatisplus.generator.keywords.MySqlKeyWordsHandler;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Collections;
 
@@ -23,7 +25,7 @@ public class CodeGen {
     private static final String JDBC_PASSWORD = "123456";
 
     // 包名
-    private static final String PACKAGE_NAME = "com.zd";
+    private static final String PACKAGE_NAME = "com.aiden.trading";
 
     // 表名,多个表使用英文逗号分割
     private static final String[] TBL_NAMES = {"quartz_job"};
@@ -55,7 +57,7 @@ public class CodeGen {
          */
         fastAutoGenerator.globalConfig(
                 globalConfigBuilder -> globalConfigBuilder
-                        .fileOverride()     // 覆盖已生成文件
+//                        .fileOverride()     // 覆盖已生成文件
                         .disableOpenDir()   // 不打开生成文件目录
                         .outputDir(projectPath + "/src/main/java") // 指定输出目录,注意斜杠的表示
                         .author("zd") // 设置注释的作者
@@ -115,8 +117,8 @@ public class CodeGen {
                         .columnNaming(NamingStrategy.underline_to_camel)
                         .idType(IdType.AUTO)    // 全局主键类型为AUTO(自增)
                         .enableLombok() // 支持lombok开启注解
-                        .logicDeleteColumnName("deleted")   // 逻辑删除字段名(数据库)
-                        .logicDeletePropertyName("deleted") // 逻辑删除属性名(实体)
+//                        .logicDeleteColumnName("deleted")   // 逻辑删除字段名(数据库)
+//                        .logicDeletePropertyName("deleted") // 逻辑删除属性名(实体)
                         .addTableFills(new Column("create_time", FieldFill.INSERT)) // 自动填充配置  create_time  update_time 两种方式
                         .addTableFills(new Property("updateTime", FieldFill.INSERT_UPDATE))
                         .versionColumnName("version")   // 开启乐观锁
@@ -125,6 +127,7 @@ public class CodeGen {
 //                        .formatFileName("%sEntity") // 实体名称格式化为XXXEntity   formatFileName("%sEntity")
                         .formatFileName("%s") // 实体名称格式化为XXX
                         .enableTableFieldAnnotation()
+                        .superClass(BaseEntity.class)
                         .enableFileOverride()
 
         );
@@ -153,7 +156,8 @@ public class CodeGen {
          */
         fastAutoGenerator.strategyConfig(
                 strategyConfigBuilder -> strategyConfigBuilder.mapperBuilder()
-                        .enableMapperAnnotation()   // 开启 @Mapper 注解
+//                        .enableMapperAnnotation()   // 开启 @Mapper 注解
+                        .mapperAnnotation(Mapper.class)
                         .formatMapperFileName("%sDao")
                         .formatXmlFileName("%sMapper"));
 
