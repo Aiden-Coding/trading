@@ -1,6 +1,25 @@
+
+drop table if exists `tv_kline_mark`;
+CREATE TABLE `tv_kline_mark` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `text` varchar(50) DEFAULT NULL COMMENT 'text',
+  `label` varchar(50) DEFAULT NULL COMMENT 'label',
+  `label_font_color` varchar(20) DEFAULT NULL COMMENT 'label_font_color',
+  `symbol` varchar(20) DEFAULT NULL COMMENT 'symbol',
+  `resolution` varchar(20) DEFAULT NULL COMMENT 'resolution',
+  `color` varchar(20) DEFAULT NULL COMMENT 'color',
+  `min_size` int(11) DEFAULT NULL COMMENT 'min_size',
+  `time` int(11) DEFAULT NULL COMMENT 'time',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='k线mark';
+
+
+
 drop table if exists `tv_chart_info`;
 CREATE TABLE `tv_chart_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '模板id',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `name` varchar(200) DEFAULT NULL COMMENT '名称',
   `content` blob DEFAULT NULL COMMENT '内容',
   `client` varchar(20) DEFAULT NULL COMMENT '客户端',
@@ -16,7 +35,7 @@ CREATE TABLE `tv_chart_info` (
 
 drop table if exists `tv_study_template_info`;
 CREATE TABLE `tv_study_template_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '模板id',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `name` varchar(200) DEFAULT NULL COMMENT '名称',
   `content` blob DEFAULT NULL COMMENT '内容',
   `client` varchar(20) DEFAULT NULL COMMENT '客户端',

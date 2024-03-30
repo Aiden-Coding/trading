@@ -9,6 +9,7 @@ import com.aiden.trading.dto.tradingview.req.SaveStudyTemplateReq;
 import com.aiden.trading.dto.tradingview.resp.*;
 import com.aiden.trading.entity.TvChartInfo;
 import com.aiden.trading.service.ITvChartInfoService;
+import com.aiden.trading.service.ITvKlineMarkService;
 import com.aiden.trading.service.ITvStudyTemplateInfoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -29,6 +30,9 @@ public class TradingViewController {
 
     @Resource
     private ITvChartInfoService tvChartInfoService;
+    @Resource
+    private ITvKlineMarkService tvKlineMarkService;
+
     @GetMapping("/config")
     public ConfigurationResp config() {
         ConfigurationResp configurationResp = new ConfigurationResp();
@@ -49,20 +53,19 @@ public class TradingViewController {
      * template：模板名称
      * status	ok or error
      * data	Array of objects where each object has a name property representing the template name (example: Test)
-     *
      */
     @GetMapping("/1.0/study_templates")
-    public TvResult<?> studyTemplatesV1(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "template",required = false) String template) {
+    public TvResult<?> studyTemplatesV1(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "template", required = false) String template) {
         if (StringUtils.isNoneBlank(template)) {
             TvResult<StudyTemplateInfo> ret = new TvResult<>();
-            StudyTemplateInfo studyTemplateInfo = tvStudyTemplateInfoService.getByName(template,user,client);
+            StudyTemplateInfo studyTemplateInfo = tvStudyTemplateInfoService.getByName(template, user, client);
             ret.setStatus(TradingViewConstant.Ok);
             ret.setData(studyTemplateInfo);
             return ret;
         }
-        TvResult<List<Map<String,Object>>> ret = new TvResult<>();
+        TvResult<List<Map<String, Object>>> ret = new TvResult<>();
         ret.setStatus(TradingViewConstant.Ok);
-        ret.setData(tvStudyTemplateInfoService.getStudyTemplateNames(user,client));
+        ret.setData(tvStudyTemplateInfoService.getStudyTemplateNames(user, client));
         return ret;
     }
 
@@ -71,13 +74,13 @@ public class TradingViewController {
      * post /charts_storage_api_version/charts?client=client_id&user=user_id
      * status	ok or error
      * data	Array of objects where each object has a name property representing the template name (example: Test)
-     *
      */
     @PostMapping("/1.0/study_templates")
     public TvResult<?> postStudyTemplatesV1(SaveStudyTemplateReq saveStudyTemplateReq) {
         tvStudyTemplateInfoService.saveStudyTemplate(saveStudyTemplateReq);
         return TvResult.ok();
     }
+
     /**
      * delete /charts_storage_api_version/charts?client=client_id&user=user_id
      * status	ok or error
@@ -87,12 +90,11 @@ public class TradingViewController {
      */
     @DeleteMapping("/1.0/study_templates")
     public TvResult<?> deleteStudyTemplatesV1(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam("template") String template) {
-        tvStudyTemplateInfoService.deleteStudyTemplateByName(client,user,template);
+        tvStudyTemplateInfoService.deleteStudyTemplateByName(client, user, template);
         return TvResult.ok();
     }
 
     /**
-     *
      * status：ok 或 error
      * data：对象数组
      * timestamp：保存图表的 UNIX 时间（例如，1449084321）
@@ -100,20 +102,21 @@ public class TradingViewController {
      * resolution：图表的分辨率（例如，1D）
      * id：图表的唯一整数标识符（例如，9163）
      * name：图表名称（例如，Test
+     *
      * @return
      */
     @GetMapping("/1.0/charts")
-    public TvResult<?> charts(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "chart",required = false) Integer chart) {
+    public TvResult<?> charts(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "chart", required = false) Integer chart) {
         if (Objects.nonNull(chart)) {
             TvResult<ChartInfo> reta = new TvResult<>();
-            ChartInfo studyTemplateInfo = tvChartInfoService.getChartInfoById(chart,user,client);
+            ChartInfo studyTemplateInfo = tvChartInfoService.getChartInfoById(chart, user, client);
             reta.setStatus(TradingViewConstant.Ok);
             reta.setData(studyTemplateInfo);
             return reta;
         }
-        TvResult<List<Map<String,Object>>> ret = new TvResult<>();
+        TvResult<List<Map<String, Object>>> ret = new TvResult<>();
         ret.setStatus(TradingViewConstant.Ok);
-        ret.setData(tvChartInfoService.getChartInfos(user,client));
+        ret.setData(tvChartInfoService.getChartInfos(user, client));
         return ret;
     }
 
@@ -122,34 +125,32 @@ public class TradingViewController {
      * post /charts_storage_api_version/charts?client=client_id&user=user_id
      * status	ok or error
      * data	Array of objects where each object has a name property representing the template name (example: Test)
-     *
      */
     @PostMapping("/1.0/charts")
-    public Map<String,Object> postCharts( SaveChartReq saveChartReq) {
+    public Map<String, Object> postCharts(SaveChartReq saveChartReq) {
         TvChartInfo tvChartInfo = tvChartInfoService.saveChart(saveChartReq);
-        Map<String,Object> ret = new HashMap<>();
-        ret.put("status",TradingViewConstant.Ok);
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("status", TradingViewConstant.Ok);
         if (Objects.isNull(saveChartReq.getChart())) {
             ret.put("id", tvChartInfo.getId());
         }
         return ret;
     }
+
     /**
      * delete /charts_storage_api_version/charts?client=client_id&user=user_id
      * status	ok or error
      * data	Array of objects where each object has a name property representing the template name (example: Test)
-     *
      */
     @DeleteMapping("/1.0/charts")
     public TvResult<?> deleteCharts(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam("chart") Integer chart) {
-        tvChartInfoService.deleteChart(client,user,chart);
+        tvChartInfoService.deleteChart(client, user, chart);
         return TvResult.ok();
     }
 
     /**
      * GET /quotes?symbols=<ticker_name_1>,<ticker_name_2>,...,<ticker_name_n>
      *
-     * @return
      */
     @GetMapping("quotes")
     public QuotesResp quotes(@RequestParam("symbols") List<String> symbols) {
@@ -184,7 +185,6 @@ public class TradingViewController {
      * GET /symbols?symbol=AAL, GET /symbols?symbol=NYSE:MSFT
      * symbol: string. Symbol name or ticker.
      *
-     * @return
      */
     @GetMapping("/symbols")
     public SymbolInfoResp symbol(@RequestParam("symbol") String symbol) {
@@ -226,7 +226,6 @@ public class TradingViewController {
      * l: 最低价(可选)
      * v: 成交量 (可选)
      *
-     * @return
      */
     @GetMapping("/history")
     public HistoryResp history(@RequestParam("symbol") String symbol, @RequestParam("resolution") String resolution, @RequestParam("from") Long from, @RequestParam("to") Long to, @RequestParam("countback") Long countback) {
@@ -247,35 +246,12 @@ public class TradingViewController {
 
 
     /**
-     * GET /history?symbol=<ticker_name>&from=<unix_timestamp>&to=<unix_timestamp>&resolution=<resolution>&countback=<countback>
-     * symbol: 商品ID
-     * from: unix timestamp (UTC) 最左侧所需K线的 unix 时间戳
-     * to: unix timestamp (UTC) 最右边的所需K线（不包括在内）
-     * resolution: string
-     * countback: 以 to 开头的k线（优先级高于 from ）。 如果设置了 countback，则应该忽略 from
-     * <p>
-     * s: 状态码。 预期值:ok|error|no_data
-     * errmsg: 错误消息。只在s = 'error'时出现
-     * t: K线时间. unix时间戳 (UTC)
-     * c: 收盘价
-     * o: 开盘价 (可选)
-     * h: 最高价 (可选)
-     * l: 最低价(可选)
-     * v: 成交量 (可选)
+     * GET /marks?symbol=<ticker_name>&from=<unix_timestamp>&to=<unix_timestamp>&resolution=<resolution>
      *
-     * @return
      */
     @GetMapping("/marks")
     public MarksResp marks(@RequestParam("symbol") String symbol, @RequestParam("resolution") String resolution, @RequestParam("from") Long from, @RequestParam("to") Long to) {
-        MarksResp ret = new MarksResp();
-        ret.setId(List.of(0));
-        ret.setText(List.of("Red"));
-        ret.setLabel(List.of("A"));
-        ret.setLabelFontColor(List.of("red"));
-        ret.setColor(List.of("red"));
-        ret.setMinSize(List.of(12));
-        ret.setTime(List.of(1522108800));
-        return ret;
+        return tvKlineMarkService.selectKlineMark(symbol, resolution, from, to);
     }
 
 
