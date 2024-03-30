@@ -10,8 +10,8 @@ public enum JobStateEnum {
     JOB_STOP(2, "暂停"),
     JOB_DEL(3, "删除");
 
-    private int status;
-    private String desc;
+    private final Integer status;
+    private final String desc;
 
     JobStateEnum(int status, String desc) {
         this.status = status;

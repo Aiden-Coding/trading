@@ -1,6 +1,6 @@
 package com.aiden.trading.dto;
 
-import com.aiden.trading.constant.ResultConstant;
+import com.aiden.trading.constant.ResultEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,12 +16,12 @@ public class Result<T> implements Serializable {
     private String message;
     private T result;
 
-    public static  Result<?> ok() {
-        return new Result<>(ResultConstant.CODE_SUCCESS, "ok", (Object) null);
+    public static Result<?> ok() {
+        return new Result<>(ResultEnum.CODE_SUCCESS.getCode(), ResultEnum.CODE_SUCCESS.getDesc(), (Object) null);
     }
 
     public static Result<?> ok(String msg) {
-        return new Result<>(ResultConstant.CODE_SUCCESS, msg, (Object) null);
+        return new Result<>(ResultEnum.CODE_SUCCESS.getCode(), msg, (Object) null);
     }
 
     public static Result<?> code(int code) {
@@ -29,15 +29,15 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> data(T result) {
-        return new Result<T>(ResultConstant.CODE_SUCCESS, "ok", result);
+        return new Result<T>(ResultEnum.CODE_SUCCESS.getCode(), ResultEnum.CODE_SUCCESS.getDesc(), result);
     }
 
     public static Result<?> error() {
-        return new Result<>(ResultConstant.CODE_ERROR, "error", (Object) null);
+        return new Result<>(ResultEnum.CODE_ERROR.getCode(), ResultEnum.CODE_ERROR.getDesc(), (Object) null);
     }
 
     public static Result<?> error(String msg) {
-        return new Result<>(ResultConstant.CODE_ERROR, msg, (Object) null);
+        return new Result<>(ResultEnum.CODE_ERROR.getCode(), msg, (Object) null);
     }
 
     public static <T> Result<T> get(int code, String msg, T data) {
