@@ -19,7 +19,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "QuartzJob实体类")
-public class QuartzJob implements Serializable {
+public class QuartzJob extends BaseEntity {
     private static final long serialVersionUID = 1L;
     /**
      * 任务调度参数key

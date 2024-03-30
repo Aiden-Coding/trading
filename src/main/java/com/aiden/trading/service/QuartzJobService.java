@@ -3,12 +3,14 @@ package com.aiden.trading.service;
 import com.aiden.trading.constant.JobState;
 import com.aiden.trading.entity.QuartzJob;
 import com.aiden.trading.mapper.QuartzJobMapper;
+import com.aiden.trading.mapper.QuartzLogMapper;
 import com.aiden.trading.scheduler.QuartzManage;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.quartz.CronTrigger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +24,8 @@ public class QuartzJobService {
 
     @Resource
     private QuartzJobMapper quartzJobMapper ;
+    @Resource
+    private QuartzLogMapper quartzLogMapper ;
 
     @Resource
     private QuartzManage quartzManage;

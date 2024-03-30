@@ -16,7 +16,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuartzLog {
+public class QuartzLog extends BaseEntity{
 
     @TableId(value = "id",type = IdType.AUTO)
     private Long id;
