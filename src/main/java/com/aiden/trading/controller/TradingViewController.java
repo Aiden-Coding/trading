@@ -7,6 +7,7 @@ import com.aiden.trading.dto.tradingview.StudyTemplateInfo;
 import com.aiden.trading.dto.tradingview.req.SaveChartReq;
 import com.aiden.trading.dto.tradingview.req.SaveStudyTemplateReq;
 import com.aiden.trading.dto.tradingview.resp.*;
+import com.aiden.trading.entity.TvChartInfo;
 import com.aiden.trading.service.ITvChartInfoService;
 import com.aiden.trading.service.ITvStudyTemplateInfoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -102,7 +103,7 @@ public class TradingViewController {
      * @return
      */
     @GetMapping("/1.0/charts")
-    public Object charts(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "chart",required = false) Integer chart) {
+    public TvResult<?> charts(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "chart",required = false) Integer chart) {
         if (Objects.nonNull(chart)) {
             TvResult<ChartInfo> reta = new TvResult<>();
             ChartInfo studyTemplateInfo = tvChartInfoService.getChartInfoById(chart,user,client);
@@ -124,11 +125,9 @@ public class TradingViewController {
      *
      */
     @PostMapping("/1.0/charts")
-    public SaveOrUpdateChartsResp postCharts( SaveChartReq saveChartReq) {
-        SaveOrUpdateChartsResp ret = new SaveOrUpdateChartsResp();
-        ret.setStatus(TradingViewConstant.Ok);
-        ret.setId(1);
-        return ret;
+    public TvResult<?> postCharts( SaveChartReq saveChartReq) {
+        TvChartInfo tvChartInfo = tvChartInfoService.saveChart(saveChartReq);
+        return TvResult.ok(Map.of("id",tvChartInfo.getId()));
     }
     /**
      * delete /charts_storage_api_version/charts?client=client_id&user=user_id
@@ -137,10 +136,9 @@ public class TradingViewController {
      *
      */
     @DeleteMapping("/1.0/charts")
-    public DeleteChartsResp deleteCharts(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam("chart") Integer chart) {
-        DeleteChartsResp ret = new DeleteChartsResp();
-        ret.setStatus(TradingViewConstant.Ok);
-        return ret;
+    public TvResult<?> deleteCharts(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam("chart") Integer chart) {
+        tvChartInfoService.deleteChart(client,user,chart);
+        return TvResult.ok();
     }
 
     /**

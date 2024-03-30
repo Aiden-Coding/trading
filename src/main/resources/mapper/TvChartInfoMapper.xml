@@ -12,6 +12,7 @@
         <result column="client" property="client" />
         <result column="user" property="user" />
         <result column="symbol" property="symbol" />
+        <result column="timestamp" property="timestamp" />
         <result column="resolution" property="resolution" />
     </resultMap>
 
@@ -19,7 +20,7 @@
     <sql id="Base_Column_List">
         create_time,
         update_time,
-        id, `name`, content, `client`, `user`, symbol, resolution
+        id, `name`, content, `client`, `user`, symbol, `timestamp`, resolution
     </sql>
 
 </mapper>

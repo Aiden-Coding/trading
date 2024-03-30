@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author zd
- * @since 2024-03-30 21:05:46
+ * @since 2024-03-30 21:22:00
  */
 @Getter
 @Setter
@@ -48,6 +48,10 @@ public class TvChartInfo extends BaseEntity {
     @Schema(description = "symbol")
     @TableField("symbol")
     private String symbol;
+
+    @Schema(description = "timestamp")
+    @TableField("`timestamp`")
+    private Integer timestamp;
 
     @Schema(description = "resolution")
     @TableField("resolution")

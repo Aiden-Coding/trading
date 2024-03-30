@@ -6,6 +6,7 @@ CREATE TABLE `tv_chart_info` (
   `client` varchar(20) DEFAULT NULL COMMENT '客户端',
   `user` varchar(20) DEFAULT NULL COMMENT '用户id',
   `symbol` varchar(20) DEFAULT NULL COMMENT 'symbol',
+  `timestamp` int(11) DEFAULT NULL COMMENT 'timestamp',
   `resolution` varchar(5) DEFAULT NULL COMMENT 'resolution',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',

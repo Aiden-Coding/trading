@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author zd
- * @since 2024-03-30 21:05:46
+ * @since 2024-03-30 21:22:00
  */
 @Mapper
 public interface TvChartInfoDao extends BaseMapper<TvChartInfo> {

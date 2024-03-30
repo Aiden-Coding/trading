@@ -8,5 +8,5 @@ public class ChartInfo {
     private String name;
 
     private Integer id;
-    private Long timestamp;
+    private Integer timestamp;
 }
