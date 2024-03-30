@@ -1,7 +1,6 @@
 package com.aiden.trading.handler;
 
 import cn.dev33.satoken.exception.NotLoginException;
-import cn.dev33.satoken.util.SaResult;
 import com.aiden.trading.dto.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -7,11 +7,7 @@ import jakarta.annotation.Resource;
 import org.quartz.*;
 import org.springframework.stereotype.Component;
 
-/**
- * 任务操作基础封装
- * @author 公众号:知了一笑
- * @since 2023-07-26 14:04
- */
+
 @Component
 public class QuartzManage {
 

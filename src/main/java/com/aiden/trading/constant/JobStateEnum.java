@@ -2,10 +2,7 @@ package com.aiden.trading.constant;
 
 import lombok.Getter;
 
-/**
- * @author 公众号:知了一笑
- * @since 2023-07-26 10:05
- */
+
 @Getter
 public enum JobStateEnum {
 

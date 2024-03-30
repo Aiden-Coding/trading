@@ -7,10 +7,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * @author 公众号:知了一笑
- * @since 2023-07-16 19:15
- */
+
 @Configuration
 @MapperScan("com.aiden.trading.dao")
 public class MybatisConfig {

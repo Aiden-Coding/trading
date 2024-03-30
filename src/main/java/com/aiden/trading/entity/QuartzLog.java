@@ -1,6 +1,5 @@
 package com.aiden.trading.entity;
 
-import com.aiden.trading.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
