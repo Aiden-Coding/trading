@@ -206,5 +206,7 @@ create index idx_qrtz_ft_jg on qrtz_fired_triggers(sched_name,job_group);
 create index idx_qrtz_ft_t_g on qrtz_fired_triggers(sched_name,trigger_name,trigger_group);
 create index idx_qrtz_ft_tg on qrtz_fired_triggers(sched_name,trigger_group);
 
+
+
 commit;
 
