@@ -9,13 +9,13 @@ import lombok.Getter;
 @Getter
 public enum LogStateEnum {
 
-    LOG_SUS(1, "成功"),
-    LOG_FAIL(2, "失败");
+    LOG_SUS((byte)1, "成功"),
+    LOG_FAIL((byte)2, "失败");
 
-    private int status;
+    private Byte status;
     private String desc;
 
-    LogStateEnum(int status, String desc) {
+    LogStateEnum(Byte status, String desc) {
         this.status = status;
         this.desc = desc;
     }

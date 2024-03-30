@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 2023-07-16 19:15
  */
 @Configuration
-@MapperScan("com.aiden.trading.mapper")
+@MapperScan("com.aiden.trading.dao")
 public class MybatisConfig {
 
     /**

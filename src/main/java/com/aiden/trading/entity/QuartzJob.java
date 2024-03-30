@@ -1,49 +1,51 @@
 package com.aiden.trading.entity;
 
+import com.aiden.trading.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.Date;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
- * 
- * @author 公众号:知了一笑
- * @since 2023-07-26 11:04
+ * <p>
+ * 任务列表
+ * </p>
+ *
+ * @author zd
+ * @since 2024-03-30 10:22:44
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Schema(description = "QuartzJob实体类")
+@Getter
+@Setter
+@Accessors(chain = true)
+@TableName("quartz_job")
+@Schema(name = "QuartzJob", description = "任务列表")
 public class QuartzJob extends BaseEntity {
-    private static final long serialVersionUID = 1L;
-    /**
-     * 任务调度参数key
-     */
-    public static final String JOB_PARAM_KEY = "BOOT_JOB_PARAM_KEY";
 
     @Schema(description = "任务id")
-    @TableId(value = "id",type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @Schema(description = "Bean名称")
+    @Schema(description = "SpringBean名称")
+    @TableField("bean_name")
     private String beanName;
 
     @Schema(description = "执行参数")
+    @TableField("params")
     private String params;
 
-    @Schema(description = "Cron表达式")
+    @Schema(description = "cron表达式")
+    @TableField("cron_expres")
     private String cronExpres;
 
     @Schema(description = "任务状态：1正常，2暂停，3删除")
+    @TableField("state")
     private Integer state;
 
     @Schema(description = "备注")
+    @TableField("remark")
     private String remark;
-
-    @Schema(description = "创建时间")
-    private Date createTime;
 }

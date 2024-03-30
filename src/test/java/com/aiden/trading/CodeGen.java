@@ -28,7 +28,7 @@ public class CodeGen {
     private static final String PACKAGE_NAME = "com.aiden.trading";
 
     // 表名,多个表使用英文逗号分割
-    private static final String[] TBL_NAMES = {"quartz_job"};
+    private static final String[] TBL_NAMES = {"quartz_log"};
 
     // 表名的前缀,从表生成代码时会去掉前缀
     private static final String TABLE_PREFIX = "tb_";
@@ -63,6 +63,7 @@ public class CodeGen {
                         .author("zd") // 设置注释的作者
                         .commentDate("yyyy-MM-dd HH:mm:ss") // 设置注释的日期格式
                         .dateType(DateType.TIME_PACK)   // 使用java8新的时间类型
+                        .enableSpringdoc()
 //                        .enableSwagger()    // 开启swagger文档
         );
 
@@ -87,8 +88,8 @@ public class CodeGen {
                         .service("service")
                         .serviceImpl("service.impl")
                         .controller("controller")
-                        .xml( "\\src\\main\\resources\\mapper") // 设置XML资源文件的目录
-                        .pathInfo(Collections.singletonMap(OutputFile.xml, projectPath + "\\src\\main\\resources\\mapper"))// 设置XML资源文件的目录
+//                        .xml( "src/main/resources/mapper") // 设置XML资源文件的目录
+                        .pathInfo(Collections.singletonMap(OutputFile.xml, projectPath + "/src/main/resources/mapper"))// 设置XML资源文件的目录
 
         );
 
@@ -121,12 +122,14 @@ public class CodeGen {
 //                        .logicDeletePropertyName("deleted") // 逻辑删除属性名(实体)
                         .addTableFills(new Column("create_time", FieldFill.INSERT)) // 自动填充配置  create_time  update_time 两种方式
                         .addTableFills(new Property("updateTime", FieldFill.INSERT_UPDATE))
-                        .versionColumnName("version")   // 开启乐观锁
+
+//                        .versionColumnName("version")   // 开启乐观锁
                         .disableSerialVersionUID()  // 禁用生成 serialVersionUID，默认值:true
                         .enableChainModel() // 开启实体类链式编程
 //                        .formatFileName("%sEntity") // 实体名称格式化为XXXEntity   formatFileName("%sEntity")
                         .formatFileName("%s") // 实体名称格式化为XXX
                         .enableTableFieldAnnotation()
+
                         .superClass(BaseEntity.class)
                         .enableFileOverride()
 
@@ -137,6 +140,7 @@ public class CodeGen {
          */
         fastAutoGenerator.strategyConfig(
                 strategyConfigBuilder -> strategyConfigBuilder.controllerBuilder()
+                        .enableFileOverride()
                         .enableRestStyle()  // 开启生成@RestController控制器
                         .enableHyphenStyle()    // 开启驼峰转连字符 localhost:8080/hello_id_2
         );
@@ -147,6 +151,7 @@ public class CodeGen {
          */
         fastAutoGenerator.strategyConfig(
                 strategyConfigBuilder -> strategyConfigBuilder.serviceBuilder()
+                        .enableFileOverride()
                         .formatServiceFileName("I%sService")
                         .formatServiceImplFileName("%sServiceImpl"));
 
@@ -156,8 +161,12 @@ public class CodeGen {
          */
         fastAutoGenerator.strategyConfig(
                 strategyConfigBuilder -> strategyConfigBuilder.mapperBuilder()
+                        .enableFileOverride()
 //                        .enableMapperAnnotation()   // 开启 @Mapper 注解
                         .mapperAnnotation(Mapper.class)
+                        .enableBaseColumnList()
+                        .enableBaseResultMap()
+
                         .formatMapperFileName("%sDao")
                         .formatXmlFileName("%sMapper"));
 
