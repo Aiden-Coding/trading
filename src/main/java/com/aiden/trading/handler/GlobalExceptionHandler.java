@@ -2,6 +2,7 @@ package com.aiden.trading.handler;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.util.SaResult;
+import com.aiden.trading.dto.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     // 全局异常拦截
     @ExceptionHandler(NotLoginException.class)
-    public SaResult handlerException(Exception e) {
+    public Result<?> handlerException(Exception e) {
         log.error(e.getMessage(),e);
-        return SaResult.error(e.getMessage());
+        return Result.error(e.getMessage());
     }
 }
