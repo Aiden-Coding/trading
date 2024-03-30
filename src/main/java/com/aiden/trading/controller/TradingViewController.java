@@ -168,7 +168,7 @@ public class TradingViewController {
         dataV.setChp(new BigDecimal("0.1"));
         dataV.setShortName("AAPL");
         dataV.setExchange("AAPL");
-        dataV.setOriginalName("AAPL");
+//        dataV.setOriginalName("AAPL");
         dataV.setDescription("AAPL");
         dataV.setLp(new BigDecimal("0.1"));
         dataV.setAsk(new BigDecimal("0.1"));
