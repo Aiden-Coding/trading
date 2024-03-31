@@ -186,20 +186,20 @@ public class DolphindbTest {
         cols.add(date);
         Vector sym = new BasicStringVector(List.of("2322"));
         cols.add(sym);
-        Vector val = new BasicStringVector(List.of("23223"));
+        Vector val = new BasicStringVector(List.of("3"));
         cols.add(val);
         BasicTable table = new BasicTable(colNames, cols);
 
-        DBConnectionPool conn = new ExclusiveDBConnectionPool("192.168.0.208", 8031, "admin", "123456", 2, false, false);
+        DBConnectionPool conn1 = new ExclusiveDBConnectionPool("192.168.0.208", 8031, "admin", "123456", 2, false, false);
 
         String dbPath = "dfs://demohash2";
         String tableName = "pt";
-        PartitionedTableAppender appender = new PartitionedTableAppender(dbPath, tableName, "sym", conn);
+        PartitionedTableAppender appender = new PartitionedTableAppender(dbPath, tableName, "sym", conn1);
 //        PartitionedTableAppender appender = new PartitionedTableAppender(dbPath, tableName, "gid", "saveGridData{'" + dbPath + "','" + tableName + "'}", conn);
         appender.append(table);
 
-        conn.waitForThreadCompletion();
-        conn.shutdown();
+        conn1.waitForThreadCompletion();
+        conn1.shutdown();
     }
 
     private BasicTable createTable(Long timestamp,String val) {
