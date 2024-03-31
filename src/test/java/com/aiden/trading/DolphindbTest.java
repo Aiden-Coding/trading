@@ -16,6 +16,9 @@ import java.util.List;
 
 /**
  * <a href="https://docs.dolphindb.cn/zh/api/java/java.html">...</a>
+ * 维度表是分布式数据库中没有进行分区的表，适用于存储不频繁更新的小数据集。
+ * k线案例
+ * <a href="https://docs.dolphindb.cn/zh/tutorials/best_practices_for_partitioned_storage.html?hl=%E7%BB%B4%E5%BA%A6#312-%E8%82%A1%E7%A5%A8%E6%97%A5-k-%E7%BA%BF">...</a>
  */
 public class DolphindbTest {
 
