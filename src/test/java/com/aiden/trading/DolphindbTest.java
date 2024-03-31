@@ -106,14 +106,14 @@ public class DolphindbTest {
      * dolphindb 建分布式表
      * dbPath = 'dfs://testDatabase'
      * tbName = 'tb1'
-     *
+     * <p>
      * if(existsDatabase(dbPath)){dropDatabase(dbPath)}
      * db = database(dbPath,RANGE,2018.01.01..2018.12.31)
      * db.createPartitionedTable(t,tbName,'ctimestamp')
      */
     @Test
     public void testDistributionBasicTableInsert2() throws IOException {
-        List<String> colNames = List.of("sym", "id", "ctimestamp","val");
+        List<String> colNames = List.of("sym", "id", "ctimestamp", "val");
         List<Vector> cols = new ArrayList<>();
         Vector sym = new BasicSymbolVector(List.of("hel2"));
         cols.add(sym);
@@ -124,10 +124,12 @@ public class DolphindbTest {
         Vector val = new BasicIntVector(List.of(225));
         cols.add(val);
         BasicTable table1 = new BasicTable(colNames, cols);
-        test_save_distribution_table("dfs://testDatabase3","tb1", table1);
-    }    @Test
+        test_save_distribution_table("dfs://testDatabase3", "tb1", table1);
+    }
+
+    @Test
     public void testDistributionBasicTableInsert3() throws IOException {
-        List<String> colNames = List.of("sym", "id", "ctimestamp","val");
+        List<String> colNames = List.of("sym", "id", "ctimestamp", "val");
         List<Vector> cols = new ArrayList<>();
         Vector sym = new BasicSymbolVector(List.of("hel2"));
         cols.add(sym);
@@ -138,11 +140,14 @@ public class DolphindbTest {
         Vector val = new BasicIntVector(List.of(223));
         cols.add(val);
         BasicTable table1 = new BasicTable(colNames, cols);
-        test_save_distribution_table("dfs://testDatabase10","tb1", table1);
+        test_save_distribution_table("dfs://testDatabase10", "tb1", table1);
     }
-    public void test_save_distribution_table(String dbPath,String tableName, BasicTable table1) throws IOException{
+
+    public void test_save_distribution_table(String dbPath, String tableName, BasicTable table1) throws IOException {
         List<Entity> args = new ArrayList<Entity>(1);
         args.add(table1);
-        conn.run(String.format("tableInsert{loadTable('%s','%s')}",dbPath,tableName), args);
+        conn.run(String.format("tableInsert{loadTable('%s','%s')}", dbPath, tableName), args);
     }
+
+
 }

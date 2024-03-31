@@ -31,3 +31,14 @@ db = database(dbPath, RANGE, 2024.01.01..2024.12.31,engine="TSDB")
 t=keyedTable(`ctimestamp`sym,1:0,`sym`id`ctimestamp`val,(SYMBOL,INT,TIMESTAMP,INT))
 db.createPartitionedTable(t, tbName, 'ctimestamp',keepDuplicates=LAST,sortColumns=`sym`ctimestamp)
 -- select * from loadTable("dfs://testDatabase10","tb1")
+
+-- 数据库按照 VALUE-HASH-HASH 的组合进行三级分区。
+t = table(timestamp(1..10)  as date,string(1..10) as sym)
+db1=database("",HASH,[DATETIME,10])
+db2=database("",HASH,[STRING,5])
+if(existsDatabase("dfs://demohash")){
+    dropDatabase("dfs://demohash")
+}
+db =database("dfs://demohash",COMPO,[db2,db1])
+pt = db.createPartitionedTable(t,`pt,`sym`date)
+-- select * from loadTable("dfs://demohash","pt")
