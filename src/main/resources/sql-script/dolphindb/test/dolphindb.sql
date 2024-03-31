@@ -42,3 +42,25 @@ if(existsDatabase("dfs://demohash")){
 db =database("dfs://demohash",COMPO,[db2,db1])
 pt = db.createPartitionedTable(t,`pt,`sym`date)
 -- select * from loadTable("dfs://demohash","pt")
+
+-- 数据库按照 VALUE-HASH-HASH 的组合进行三级分区。
+t = table(timestamp(1..10)  as date,string(1..10) as sym)
+db1=database("",HASH,[DATETIME,10])
+db2=database("",HASH,[STRING,5])
+if(existsDatabase("dfs://demohash1")){
+    dropDatabase("dfs://demohash1")
+}
+db =database("dfs://demohash1",COMPO,[db2,db1],engine="TSDB")
+pt = db.createPartitionedTable(t,`pt,`sym`date,keepDuplicates=LAST,sortColumns=`sym`date)
+-- select * from loadTable("dfs://demohash1","pt")
+
+-- 数据库按照 VALUE-HASH-HASH 的组合进行三级分区。
+t = table(timestamp(1..10)  as date,string(1..10) as sym,string(1..10) as val)
+db1=database("",HASH,[DATETIME,10])
+db2=database("",HASH,[STRING,5])
+if(existsDatabase("dfs://demohash2")){
+    dropDatabase("dfs://demohash2")
+}
+db =database("dfs://demohash2",COMPO,[db2,db1],engine="TSDB")
+pt = db.createPartitionedTable(t,`pt,`sym`date,keepDuplicates=LAST,sortColumns=`sym`date)
+-- select * from loadTable("dfs://demohash2","pt")

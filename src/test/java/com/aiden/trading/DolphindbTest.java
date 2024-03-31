@@ -1,9 +1,8 @@
 package com.aiden.trading;
 
-import com.xxdb.DBConnection;
-import com.xxdb.SimpleDBConnectionPool;
-import com.xxdb.SimpleDBConnectionPoolConfig;
+import com.xxdb.*;
 import com.xxdb.data.*;
+import com.xxdb.route.PartitionedTableAppender;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -149,5 +148,69 @@ public class DolphindbTest {
         conn.run(String.format("tableInsert{loadTable('%s','%s')}", dbPath, tableName), args);
     }
 
+    @Test
+    public void testMutBasicTableInsert3() throws Exception {
+        DBConnectionPool conn = new ExclusiveDBConnectionPool("192.168.0.208", 8031, "admin", "123456", 2, false, false);
+
+        String dbPath = "dfs://demohash";
+        String tableName = "pt";
+        PartitionedTableAppender appender = new PartitionedTableAppender(dbPath, tableName, "sym", conn);
+//        PartitionedTableAppender appender = new PartitionedTableAppender(dbPath, tableName, "gid", "saveGridData{'" + dbPath + "','" + tableName + "'}", conn);
+        BasicTable table1 = createTable(1709349560000L,"232");
+        appender.append(table1);
+
+        conn.waitForThreadCompletion();
+        conn.shutdown();
+    }
+
+    @Test
+    public void testMutBasicTableInsert4() throws Exception {
+        DBConnectionPool conn = new ExclusiveDBConnectionPool("192.168.0.208", 8031, "admin", "123456", 2, false, false);
+
+        String dbPath = "dfs://demohash1";
+        String tableName = "pt";
+        PartitionedTableAppender appender = new PartitionedTableAppender(dbPath, tableName, "sym", conn);
+//        PartitionedTableAppender appender = new PartitionedTableAppender(dbPath, tableName, "gid", "saveGridData{'" + dbPath + "','" + tableName + "'}", conn);
+        BasicTable table1 = createTable(1709349560000L,"2322");
+        appender.append(table1);
+
+        conn.waitForThreadCompletion();
+        conn.shutdown();
+    }
+    @Test
+    public void testMutBasicTableInsert5() throws Exception {
+
+        List<String> colNames = List.of("date", "sym", "val");
+        List<Vector> cols = new ArrayList<>();
+        Vector date = new BasicTimestampVector(List.of(1709349560000L));
+        cols.add(date);
+        Vector sym = new BasicStringVector(List.of("2322"));
+        cols.add(sym);
+        Vector val = new BasicStringVector(List.of("23223"));
+        cols.add(val);
+        BasicTable table = new BasicTable(colNames, cols);
+
+        DBConnectionPool conn = new ExclusiveDBConnectionPool("192.168.0.208", 8031, "admin", "123456", 2, false, false);
+
+        String dbPath = "dfs://demohash2";
+        String tableName = "pt";
+        PartitionedTableAppender appender = new PartitionedTableAppender(dbPath, tableName, "sym", conn);
+//        PartitionedTableAppender appender = new PartitionedTableAppender(dbPath, tableName, "gid", "saveGridData{'" + dbPath + "','" + tableName + "'}", conn);
+        appender.append(table);
+
+        conn.waitForThreadCompletion();
+        conn.shutdown();
+    }
+
+    private BasicTable createTable(Long timestamp,String val) {
+        List<String> colNames = List.of("date", "sym");
+        List<Vector> cols = new ArrayList<>();
+        Vector date = new BasicTimestampVector(List.of(timestamp));
+        cols.add(date);
+        Vector sym = new BasicStringVector(List.of(val));
+        cols.add(sym);
+        BasicTable table = new BasicTable(colNames, cols);
+        return table;
+    }
 
 }
