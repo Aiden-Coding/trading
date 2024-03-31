@@ -287,6 +287,7 @@ public class DolphindbTest {
         ThreadPooledClient client = new ThreadPooledClient(10000,10);
         client.subscribe("192.168.0.208", 8031, "trades","trades", new MyHandler(), -1,true,null,null,false,"admin", "123456");
         Thread.sleep(1000000000);
+        client.unsubscribe("192.168.0.208", 8031, "trades","trades");
     }
 }
 
