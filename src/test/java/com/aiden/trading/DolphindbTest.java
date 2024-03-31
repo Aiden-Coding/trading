@@ -1,15 +1,22 @@
 package com.aiden.trading;
 
 import com.xxdb.*;
+import com.xxdb.comm.ErrorCodeInfo;
 import com.xxdb.data.*;
+import com.xxdb.multithreadedtablewriter.MultithreadedTableWriter;
 import com.xxdb.route.PartitionedTableAppender;
+import com.xxdb.streaming.client.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * <a href="https://docs.dolphindb.cn/zh/api/java/java.html">...</a>
+ */
 public class DolphindbTest {
 
     static SimpleDBConnectionPool dbConnectionPool;
@@ -156,7 +163,7 @@ public class DolphindbTest {
         String tableName = "pt";
         PartitionedTableAppender appender = new PartitionedTableAppender(dbPath, tableName, "sym", conn);
 //        PartitionedTableAppender appender = new PartitionedTableAppender(dbPath, tableName, "gid", "saveGridData{'" + dbPath + "','" + tableName + "'}", conn);
-        BasicTable table1 = createTable(1709349560000L,"232");
+        BasicTable table1 = createTable(1709349560000L, "232");
         appender.append(table1);
 
         conn.waitForThreadCompletion();
@@ -171,12 +178,13 @@ public class DolphindbTest {
         String tableName = "pt";
         PartitionedTableAppender appender = new PartitionedTableAppender(dbPath, tableName, "sym", conn);
 //        PartitionedTableAppender appender = new PartitionedTableAppender(dbPath, tableName, "gid", "saveGridData{'" + dbPath + "','" + tableName + "'}", conn);
-        BasicTable table1 = createTable(1709349560000L,"2322");
+        BasicTable table1 = createTable(1709349560000L, "2322");
         appender.append(table1);
 
         conn.waitForThreadCompletion();
         conn.shutdown();
     }
+
     @Test
     public void testMutBasicTableInsert5() throws Exception {
 
@@ -202,7 +210,7 @@ public class DolphindbTest {
         conn1.shutdown();
     }
 
-    private BasicTable createTable(Long timestamp,String val) {
+    private BasicTable createTable(Long timestamp, String val) {
         List<String> colNames = List.of("date", "sym");
         List<Vector> cols = new ArrayList<>();
         Vector date = new BasicTimestampVector(List.of(timestamp));
@@ -213,4 +221,78 @@ public class DolphindbTest {
         return table;
     }
 
+
+    @Test
+    public void testQueryMemoryTableAll() throws Exception {
+        String tbName = "sharedTable";
+        BasicTable table = (BasicTable) conn.run(String.format("select * from %s", tbName));
+        for (int i = 0; i < table.columns(); i++) {
+            System.out.println(table.getColumnName(i));
+        }
+    }
+
+
+    @Test
+    public void testQueryTableAll() throws Exception {
+        String dbPath = "dfs://demohash2";
+        String tbName = "pt";
+        BasicTable table = (BasicTable) conn.run(String.format("select * from loadTable('%s','%s')", dbPath, tbName));
+        test_loop_basicTable(table);
+    }
+
+    public void test_loop_basicTable(BasicTable table1) throws Exception {
+        BasicTimestampVector stringv = (BasicTimestampVector) table1.getColumn("date");
+        BasicStringVector intv = (BasicStringVector) table1.getColumn("sym");
+        BasicStringVector timestampv = (BasicStringVector) table1.getColumn("val");
+        for (int ri = 0; ri < table1.rows(); ri++) {
+            System.out.println(timestampv.getString(ri));
+            System.out.println(intv.getString(ri));
+            LocalDateTime timestamp = stringv.getTimestamp(ri);
+            System.out.println(timestamp);
+        }
+    }
+
+    /**
+     * <a href="https://docs.dolphindb.cn/zh/api/java/java.html#%E4%BD%BF%E7%94%A8tableinsert%E5%87%BD%E6%95%B0%E4%BF%9D%E5%AD%98-basictable-%E5%AF%B9%E8%B1%A1-1">...</a>
+     * 没有成功
+     */
+
+    @Test
+    public void testMultithreadedTableWriter() throws Exception {
+
+//        MultithreadedTableWriter multithreadingTableWriter_ = new MultithreadedTableWriter("192.168.0.208", 8031, "admin", "123456", "dfs://demohash2", "pt",
+//                false, false, null, 10000, 1,
+//                5, "sym", new int[]{Vector.COMPRESS_LZ4, Vector.COMPRESS_LZ4, Vector.COMPRESS_DELTA}, MultithreadedTableWriter.Mode.M_Upsert,new String[]{"val"});
+       MultithreadedTableWriter multithreadingTableWriter_ = new MultithreadedTableWriter("192.168.0.208", 8031, "admin", "123456", "dfs://demohash2", "pt",
+                false, false, null, 10000, 1,
+                5, "sym", null, MultithreadedTableWriter.Mode.M_Append,null);
+        ErrorCodeInfo ret;
+//插入 1 行数据，插入数据的列数和表的列数不匹配，MTW 立刻返回错误信息
+        ret = multithreadingTableWriter_.insert(1709349560000L, "102000", "0000");
+        ret = multithreadingTableWriter_.insert(1709349560000L, "100300", "0000");
+        ret = multithreadingTableWriter_.insert(1709349560000L, "100400", "0000");
+        ret = multithreadingTableWriter_.insert(1709349560000L, "100010", "0000");
+        ret = multithreadingTableWriter_.insert(1709349560000L, "100500", "0000");
+        if (!ret.getErrorCode().equals(""))
+            System.out.println("insert wrong format data: {3}\n" + ret.toString());
+    }
+    @Test
+    public void testSubscribe() throws Exception {
+
+        PollingClient client = new PollingClient(10009);
+        TopicPoller poller1 = client.subscribe("192.168.0.208", 8031, "trades", "trades", -1,true,null,"admin", "123456");
+    }
+    @Test
+    public void testSubscribePooledClient() throws Exception {
+        ThreadPooledClient client = new ThreadPooledClient(10000,10);
+        client.subscribe("192.168.0.208", 8031, "trades","trades", new MyHandler(), -1,true,null,null,false,"admin", "123456");
+        Thread.sleep(1000000000);
+    }
+}
+
+class MyHandler implements MessageHandler {
+    public void doEvent(IMessage msg) {
+        BasicInt qty = msg.getValue(2);
+        //..处理数据
+    }
 }

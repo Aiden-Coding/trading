@@ -8,6 +8,7 @@ share t as sharedTable
 t=keyedTable(`sym`id,1:0,`sym`id`val,(SYMBOL,INT,INT))
 share t as sharedTable1
 -- select * from sharedTable1
+--  insert into sharedTable1 values(`GOOG1, 200,23);
 
 -- dolphindb 建分布式表
 dbPath = 'dfs://testDatabase3'
@@ -64,3 +65,11 @@ if(existsDatabase("dfs://demohash2")){
 db =database("dfs://demohash2",COMPO,[db2,db1],engine="TSDB")
 pt = db.createPartitionedTable(t,`pt,`sym`date,keepDuplicates=LAST,sortColumns=`sym`date)
 -- select * from loadTable("dfs://demohash2","pt")
+
+
+-- https://docs.dolphindb.cn/zh/help/FunctionsandCommands/CommandsReferences/d/dropStreamTable.html?highlight=stream
+colNames = `timestamp`sym`qty`price
+colTypes = [TIMESTAMP,SYMBOL,INT,DOUBLE]
+t=streamTable(1:0,colNames,colTypes)
+enableTableShareAndPersistence(t,`trades);
+-- dropStreamTable(`trades);
