@@ -120,4 +120,11 @@ knife4j:
 #    username: admin
 #    password: 123456
 
+dolphindb:
+  host_name: 192.168.0.208
+  port: 8031
+  user_id: admin
+  password: 123456
+  initial_pool_size: 1
+
 
