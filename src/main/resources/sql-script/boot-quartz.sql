@@ -1,4 +1,17 @@
 
+drop table if exists `tv_drawing_templates`;
+CREATE TABLE `tv_drawing_templates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(50) DEFAULT NULL COMMENT 'name',
+  `tool` varchar(50) DEFAULT NULL COMMENT 'tool',
+  `client` varchar(20) DEFAULT NULL COMMENT '客户端',
+  `user` varchar(20) DEFAULT NULL COMMENT '用户id',
+  `content` blob DEFAULT NULL COMMENT '内容',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='画图工具模板';
+
 drop table if exists `tv_kline_mark`;
 CREATE TABLE `tv_kline_mark` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',

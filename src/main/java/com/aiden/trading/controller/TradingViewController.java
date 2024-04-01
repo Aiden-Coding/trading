@@ -5,10 +5,12 @@ import com.aiden.trading.dto.TvResult;
 import com.aiden.trading.dto.tradingview.ChartInfo;
 import com.aiden.trading.dto.tradingview.StudyTemplateInfo;
 import com.aiden.trading.dto.tradingview.req.SaveChartReq;
+import com.aiden.trading.dto.tradingview.req.SaveDrawingTemplateReq;
 import com.aiden.trading.dto.tradingview.req.SaveStudyTemplateReq;
 import com.aiden.trading.dto.tradingview.resp.*;
 import com.aiden.trading.entity.TvChartInfo;
 import com.aiden.trading.service.ITvChartInfoService;
+import com.aiden.trading.service.ITvDrawingTemplatesService;
 import com.aiden.trading.service.ITvKlineMarkService;
 import com.aiden.trading.service.ITvStudyTemplateInfoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +34,8 @@ public class TradingViewController {
     private ITvChartInfoService tvChartInfoService;
     @Resource
     private ITvKlineMarkService tvKlineMarkService;
+    @Resource
+    private ITvDrawingTemplatesService drawingTemplatesService;
 
     @GetMapping("/config")
     public ConfigurationResp config() {
@@ -86,7 +90,6 @@ public class TradingViewController {
      * status	ok or error
      * data	Array of objects where each object has a name property representing the template name (example: Test)
      *
-     * @return
      */
     @DeleteMapping("/1.0/study_templates")
     public TvResult<?> deleteStudyTemplatesV1(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam("template") String template) {
@@ -103,7 +106,6 @@ public class TradingViewController {
      * id：图表的唯一整数标识符（例如，9163）
      * name：图表名称（例如，Test
      *
-     * @return
      */
     @GetMapping("/1.0/charts")
     public TvResult<?> charts(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "chart", required = false) Integer chart) {
@@ -156,21 +158,20 @@ public class TradingViewController {
      * resolution：图表的分辨率（例如，1D）
      * id：图表的唯一整数标识符（例如，9163）
      * name：图表名称（例如，Test
-     *
-     * @return
+     * drawing_templates?client=trading_platform_demo&user=public_user&tool=LineToolRay&name=c
      */
     @GetMapping("/1.0/drawing_templates")
-    public TvResult<?> getDrawingTemplates(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "chart", required = false) Integer chart) {
-        if (Objects.nonNull(chart)) {
-            TvResult<ChartInfo> reta = new TvResult<>();
-            ChartInfo studyTemplateInfo = tvChartInfoService.getChartInfoById(chart, user, client);
+    public TvResult<?> getDrawingTemplates(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "tool", required = false) String tool, @RequestParam(value = "name", required = false) String name) {
+        if (StringUtils.isNotBlank(name)) {
+            TvResult<DrawingTemplatesInfo> reta = new TvResult<>();
+            DrawingTemplatesInfo drawingTemplatesInfo =  drawingTemplatesService.getInfoByToolAndName(user, client,tool,name);
             reta.setStatus(TradingViewConstant.Ok);
-            reta.setData(studyTemplateInfo);
+            reta.setData(drawingTemplatesInfo);
             return reta;
         }
-        TvResult<List<Map<String, Object>>> ret = new TvResult<>();
+        TvResult<List<String>> ret = new TvResult<>();
         ret.setStatus(TradingViewConstant.Ok);
-        ret.setData(tvChartInfoService.getChartInfos(user, client));
+        ret.setData(drawingTemplatesService.getInfosByTool(user, client,tool));
         return ret;
     }
 
@@ -181,14 +182,9 @@ public class TradingViewController {
      * data	Array of objects where each object has a name property representing the template name (example: Test)
      */
     @PostMapping("/1.0/drawing_templates")
-    public Map<String, Object> postDrawingTemplates(SaveChartReq saveChartReq) {
-        TvChartInfo tvChartInfo = tvChartInfoService.saveChart(saveChartReq);
-        Map<String, Object> ret = new HashMap<>();
-        ret.put("status", TradingViewConstant.Ok);
-        if (Objects.isNull(saveChartReq.getChart())) {
-            ret.put("id", tvChartInfo.getId());
-        }
-        return ret;
+    public TvResult<?> postDrawingTemplates(SaveDrawingTemplateReq saveDrawingTemplateReq) {
+        drawingTemplatesService.saveDrawingTemplate(saveDrawingTemplateReq);
+        return TvResult.ok();
     }
 
     /**
@@ -197,8 +193,8 @@ public class TradingViewController {
      * data	Array of objects where each object has a name property representing the template name (example: Test)
      */
     @DeleteMapping("/1.0/drawing_templates")
-    public TvResult<?> deleteDrawingTemplates(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam("chart") Integer chart) {
-        tvChartInfoService.deleteChart(client, user, chart);
+    public TvResult<?> deleteDrawingTemplates(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "tool", required = false) String tool, @RequestParam(value = "name", required = false) String name) {
+        drawingTemplatesService.deleteByToolAndName(user, client,tool,name);
         return TvResult.ok();
     }
 
