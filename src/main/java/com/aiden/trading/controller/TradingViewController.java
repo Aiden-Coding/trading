@@ -317,12 +317,12 @@ public class TradingViewController {
             ret.setS("no_data");
             return ret;
         }
-        ret.setC(List.of(106.0, 106.1, 106.73, 107.73));
-        ret.setH(List.of(106.5, 106.5699, 106.8, 108.0));
-        ret.setL(List.of( 105.5, 105.64, 105.62, 106.82));
-        ret.setO(List.of(105.8, 105.66, 106.14, 107.7));
-        ret.setT(List.of(1472515200, 1472601600, 1472688000, 1472774400));
-        ret.setV(List.of(24863945, 29662406, 26701523, 26802450));
+        ret.setC(List.of(106.0, 106.1));
+        ret.setH(List.of(106.5, 106.5699));
+        ret.setL(List.of( 105.5, 105.64));
+        ret.setO(List.of(105.8, 105.66));
+        ret.setT(List.of(1472515200, 1472601600));
+        ret.setV(List.of(24863945, 29662406));
 
         ret.setS("ok");
         return ret;
