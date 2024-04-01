@@ -1,6 +1,7 @@
 package com.aiden.trading.dto.tradingview.resp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,6 +29,7 @@ public class ConfigurationResp {
     private List<String> supportedResolutions;
 
     @NoArgsConstructor
+    @AllArgsConstructor
     @Data
     public static class ExchangesDTO {
         @JsonProperty("value")
@@ -39,6 +41,7 @@ public class ConfigurationResp {
     }
 
     @NoArgsConstructor
+    @AllArgsConstructor
     @Data
     public static class SymbolsTypesDTO {
         @JsonProperty("name")

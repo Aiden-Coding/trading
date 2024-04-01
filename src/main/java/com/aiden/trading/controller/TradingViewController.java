@@ -37,12 +37,35 @@ public class TradingViewController {
     @Resource
     private ITvDrawingTemplatesService drawingTemplatesService;
 
+    /**
+     * {
+     *     supports_search: true,
+     *     supports_group_request: false,
+     *     supports_marks: true,
+     *     exchanges: [
+     *         {value: "", name: "All Exchanges", desc: ""},
+     *         {value: "XETRA", name: "XETRA", desc: "XETRA"},
+     *         {value: "NSE", name: "NSE", desc: "NSE"}
+     *     ],
+     *     symbolsTypes: [
+     *         {name: "All types", value: ""},
+     *         {name: "Stock", value: "stock"},
+     *         {name: "Index", value: "index"}
+     *     ],
+     *     supportedResolutions: [ "1", "15", "30", "60", "D", "2D", "3D", "W", "3W", "M", '6M' ]
+     * };
+     */
     @GetMapping("/config")
     public ConfigurationResp config() {
         ConfigurationResp configurationResp = new ConfigurationResp();
         configurationResp.setSupportsSearch(true);
+        configurationResp.setSupportsGroupRequest(false);
         configurationResp.setSupportsMarks(true);
         configurationResp.setSupportsTime(true);
+        configurationResp.setSupportsTimescaleMarks(true);
+        configurationResp.setExchanges(List.of(new ConfigurationResp.ExchangesDTO("","All Exchanges","")));
+        configurationResp.setSymbolsTypes(List.of(new ConfigurationResp.SymbolsTypesDTO("All types", "")));
+        configurationResp.setSupportedResolutions(List.of("1", "15", "30", "60", "D", "2D", "3D", "W", "3W", "M", "6M"));
         return configurationResp;
     }
 
@@ -225,7 +248,7 @@ public class TradingViewController {
         dataV.setChp(new BigDecimal("0.1"));
         dataV.setShortName("AAPL");
         dataV.setExchange("AAPL");
-//        dataV.setOriginalName("AAPL");
+        dataV.setOriginalName("AAPL");
         dataV.setDescription("AAPL");
         dataV.setLp(new BigDecimal("0.1"));
         dataV.setAsk(new BigDecimal("0.1"));
@@ -260,8 +283,8 @@ public class TradingViewController {
         symbolInfoResp.setSupportedResolutions(Arrays.asList("D", "2D", "3D", "W", "3W", "M", "6M"));
         symbolInfoResp.setPricescale(100);
         symbolInfoResp.setTicker("APPL");
-        symbolInfoResp.setLogoUrls(List.of("https://"));
-        symbolInfoResp.setExchangeLogo("https://");
+        symbolInfoResp.setLogoUrls(List.of("https://s3-symbol-logo.tradingview.com/apple.svg"));
+        symbolInfoResp.setExchangeLogo("https://s3-symbol-logo.tradingview.com/country/US.svg");
         return symbolInfoResp;
     }
 
@@ -284,17 +307,19 @@ public class TradingViewController {
      */
     @GetMapping("/history")
     public HistoryResp history(@RequestParam("symbol") String symbol, @RequestParam("resolution") String resolution, @RequestParam("from") Long from, @RequestParam("to") Long to, @RequestParam("countback") Long countback) {
+
         HistoryResp ret = new HistoryResp();
+        if (from < 1672185600) {
+            ret.setS("no_data");
+            return ret;
+        }
         ret.setC(List.of(109.49));
         ret.setH(List.of(110.94));
         ret.setL(List.of(109.03));
         ret.setO(List.of(110.365));
         ret.setT(List.of(1480550400));
         ret.setV(List.of(37086862));
-        if (from < 1672185600) {
-            ret.setS("no_data");
-            return ret;
-        }
+
         ret.setS("ok");
         return ret;
     }
