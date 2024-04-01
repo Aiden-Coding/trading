@@ -3,14 +3,15 @@ package com.aiden.trading.service.impl;
 import com.aiden.trading.dao.TvDrawingTemplatesDao;
 import com.aiden.trading.dto.tradingview.req.SaveDrawingTemplateReq;
 import com.aiden.trading.dto.tradingview.resp.DrawingTemplatesInfo;
-import com.aiden.trading.entity.TvChartInfo;
 import com.aiden.trading.entity.TvDrawingTemplates;
 import com.aiden.trading.service.ITvDrawingTemplatesService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,7 +50,13 @@ public class TvDrawingTemplatesServiceImpl extends ServiceImpl<TvDrawingTemplate
         queryWrapper.eq(TvDrawingTemplates::getUser, user);
         queryWrapper.eq(TvDrawingTemplates::getClient, client);
         queryWrapper.eq(TvDrawingTemplates::getTool, tool);
-        return baseMapper.selectObjs(queryWrapper);
+        List<String> ret = new ArrayList<>();
+        ret.add("");
+        List<String> dbRets = baseMapper.selectObjs(queryWrapper);
+        if (CollectionUtils.isNotEmpty(dbRets)) {
+            ret.addAll(dbRets);
+        }
+        return ret;
     }
 
     @Override
