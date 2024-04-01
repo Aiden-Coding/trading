@@ -149,8 +149,69 @@ public class TradingViewController {
     }
 
     /**
-     * GET /quotes?symbols=<ticker_name_1>,<ticker_name_2>,...,<ticker_name_n>
+     * status：ok 或 error
+     * data：对象数组
+     * timestamp：保存图表的 UNIX 时间（例如，1449084321）
+     * symbol：图表的商品ID（例如，AA）
+     * resolution：图表的分辨率（例如，1D）
+     * id：图表的唯一整数标识符（例如，9163）
+     * name：图表名称（例如，Test
      *
+     * @return
+     */
+    @GetMapping("/1.0/drawing_templates")
+    public TvResult<?> getDrawingTemplates(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "chart", required = false) Integer chart) {
+        if (Objects.nonNull(chart)) {
+            TvResult<ChartInfo> reta = new TvResult<>();
+            ChartInfo studyTemplateInfo = tvChartInfoService.getChartInfoById(chart, user, client);
+            reta.setStatus(TradingViewConstant.Ok);
+            reta.setData(studyTemplateInfo);
+            return reta;
+        }
+        TvResult<List<Map<String, Object>>> ret = new TvResult<>();
+        ret.setStatus(TradingViewConstant.Ok);
+        ret.setData(tvChartInfoService.getChartInfos(user, client));
+        return ret;
+    }
+
+
+    /**
+     * post /charts_storage_api_version/charts?client=client_id&user=user_id
+     * status	ok or error
+     * data	Array of objects where each object has a name property representing the template name (example: Test)
+     */
+    @PostMapping("/1.0/drawing_templates")
+    public Map<String, Object> postDrawingTemplates(SaveChartReq saveChartReq) {
+        TvChartInfo tvChartInfo = tvChartInfoService.saveChart(saveChartReq);
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("status", TradingViewConstant.Ok);
+        if (Objects.isNull(saveChartReq.getChart())) {
+            ret.put("id", tvChartInfo.getId());
+        }
+        return ret;
+    }
+
+    /**
+     * delete /charts_storage_api_version/charts?client=client_id&user=user_id
+     * status	ok or error
+     * data	Array of objects where each object has a name property representing the template name (example: Test)
+     */
+    @DeleteMapping("/1.0/drawing_templates")
+    public TvResult<?> deleteDrawingTemplates(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam("chart") Integer chart) {
+        tvChartInfoService.deleteChart(client, user, chart);
+        return TvResult.ok();
+    }
+
+    /**
+     * GET /marks?symbol=<ticker_name>&from=<unix_timestamp>&to=<unix_timestamp>&resolution=<resolution>
+     */
+    @GetMapping("/marks")
+    public MarksResp marks(@RequestParam("symbol") String symbol, @RequestParam("resolution") String resolution, @RequestParam("from") Long from, @RequestParam("to") Long to) {
+        return tvKlineMarkService.selectKlineMark(symbol, resolution, from, to);
+    }
+
+    /**
+     * GET /quotes?symbols=<ticker_name_1>,<ticker_name_2>,...,<ticker_name_n>
      */
     @GetMapping("quotes")
     public QuotesResp quotes(@RequestParam("symbols") List<String> symbols) {
@@ -184,7 +245,6 @@ public class TradingViewController {
     /**
      * GET /symbols?symbol=AAL, GET /symbols?symbol=NYSE:MSFT
      * symbol: string. Symbol name or ticker.
-     *
      */
     @GetMapping("/symbols")
     public SymbolInfoResp symbol(@RequestParam("symbol") String symbol) {
@@ -225,7 +285,6 @@ public class TradingViewController {
      * h: 最高价 (可选)
      * l: 最低价(可选)
      * v: 成交量 (可选)
-     *
      */
     @GetMapping("/history")
     public HistoryResp history(@RequestParam("symbol") String symbol, @RequestParam("resolution") String resolution, @RequestParam("from") Long from, @RequestParam("to") Long to, @RequestParam("countback") Long countback) {
@@ -243,16 +302,5 @@ public class TradingViewController {
         ret.setS("ok");
         return ret;
     }
-
-
-    /**
-     * GET /marks?symbol=<ticker_name>&from=<unix_timestamp>&to=<unix_timestamp>&resolution=<resolution>
-     *
-     */
-    @GetMapping("/marks")
-    public MarksResp marks(@RequestParam("symbol") String symbol, @RequestParam("resolution") String resolution, @RequestParam("from") Long from, @RequestParam("to") Long to) {
-        return tvKlineMarkService.selectKlineMark(symbol, resolution, from, to);
-    }
-
 
 }
