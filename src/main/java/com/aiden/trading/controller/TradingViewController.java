@@ -65,7 +65,15 @@ public class TradingViewController {
         configurationResp.setSupportsTimescaleMarks(true);
         configurationResp.setExchanges(List.of(new ConfigurationResp.ExchangesDTO("", "All Exchanges", "")));
         configurationResp.setSymbolsTypes(List.of(new ConfigurationResp.SymbolsTypesDTO("All types", "")));
-        configurationResp.setSupportedResolutions(List.of("1", "15", "30", "60", "D", "2D", "3D", "W", "3W", "M", "6M"));
+        configurationResp.setSupportedResolutions(List.of("1T", "5T", "100T",//tick
+                "1S", "2S", "100S",//second
+                "1", "2", "100",//minute
+                "60", "120", "240",//hour
+                "1D", "2D", "100D",//day
+                "1W", "2W", "240W",//week
+                "1M", "2M", "100M",//month
+                "12M", "24M", "48M"//year
+                ));
         return configurationResp;
     }
 
