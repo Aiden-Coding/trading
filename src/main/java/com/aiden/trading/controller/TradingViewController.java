@@ -5,14 +5,12 @@ import com.aiden.trading.dto.TvResult;
 import com.aiden.trading.dto.tradingview.ChartInfo;
 import com.aiden.trading.dto.tradingview.StudyTemplateInfo;
 import com.aiden.trading.dto.tradingview.req.SaveChartReq;
+import com.aiden.trading.dto.tradingview.req.SaveDrawingReq;
 import com.aiden.trading.dto.tradingview.req.SaveDrawingTemplateReq;
 import com.aiden.trading.dto.tradingview.req.SaveStudyTemplateReq;
 import com.aiden.trading.dto.tradingview.resp.*;
 import com.aiden.trading.entity.TvChartInfo;
-import com.aiden.trading.service.ITvChartInfoService;
-import com.aiden.trading.service.ITvDrawingTemplatesService;
-import com.aiden.trading.service.ITvKlineMarkService;
-import com.aiden.trading.service.ITvStudyTemplateInfoService;
+import com.aiden.trading.service.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +34,8 @@ public class TradingViewController {
     private ITvKlineMarkService tvKlineMarkService;
     @Resource
     private ITvDrawingTemplatesService drawingTemplatesService;
+    @Resource
+    private ITvDrawingService drawingService;
 
     /**
      * {
@@ -224,6 +224,43 @@ public class TradingViewController {
     @DeleteMapping("/1.0/drawing_templates")
     public TvResult<?> deleteDrawingTemplates(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "tool", required = false) String tool, @RequestParam(value = "name", required = false) String name) {
         drawingTemplatesService.deleteByToolAndName(user, client, tool, name);
+        return TvResult.ok();
+    }
+
+    /**
+     * status：ok 或 error
+     * data：对象数组
+     * timestamp：保存图表的 UNIX 时间（例如，1449084321）
+     * symbol：图表的商品ID（例如，AA）
+     * resolution：图表的分辨率（例如，1D）
+     * id：图表的唯一整数标识符（例如，9163）
+     * name：图表名称（例如，Test
+     * drawing_templates?client=trading_platform_demo&user=public_user&tool=LineToolRay&name=c
+     */
+    @GetMapping("/1.0/drawings")
+    public TvResult<?> getDrawings(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "tool", required = false) String tool, @RequestParam(value = "name", required = false) String name) {
+        return TvResult.ok();
+    }
+
+
+    /**
+     * post /charts_storage_api_version/charts?client=client_id&user=user_id
+     * status	ok or error
+     * data	Array of objects where each object has a name property representing the template name (example: Test)
+     */
+    @PostMapping("/1.0/drawings")
+    public TvResult<?> postDrawings(SaveDrawingReq saveDrawingReq) {
+        drawingService.saveDrawing(saveDrawingReq);
+        return TvResult.ok();
+    }
+
+    /**
+     * delete /charts_storage_api_version/charts?client=client_id&user=user_id
+     * status	ok or error
+     * data	Array of objects where each object has a name property representing the template name (example: Test)
+     */
+    @DeleteMapping("/1.0/drawings")
+    public TvResult<?> deleteDrawings(@RequestParam("client") String client, @RequestParam("user") String user, @RequestParam(value = "tool", required = false) String tool, @RequestParam(value = "name", required = false) String name) {
         return TvResult.ok();
     }
 
