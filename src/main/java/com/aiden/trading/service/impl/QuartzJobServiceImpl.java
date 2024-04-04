@@ -15,6 +15,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.quartz.CronTrigger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -66,6 +67,7 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobDao, QuartzJob> i
     /**
      * 新增任务
      */
+    @Transactional
     public int insert(QuartzJob quartzJob) {
         int flag = quartzJobDao.insert(quartzJob);
         if (flag > 0) {

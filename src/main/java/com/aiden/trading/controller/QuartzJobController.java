@@ -43,8 +43,9 @@ public class QuartzJobController {
 
     @Operation(summary = "任务新增")
     @PostMapping("/job")
-    public Integer insert(@RequestBody QuartzJob quartzJob){
-        return quartzJobService.insert(quartzJob) ;
+    public Result<?> insert(@RequestBody QuartzJob quartzJob){
+         quartzJobService.insert(quartzJob) ;
+         return Result.ok();
     }
 
     @Operation(summary = "更新任务")
