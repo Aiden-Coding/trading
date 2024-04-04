@@ -1,7 +1,10 @@
 package com.aiden.trading.controller;
 
+import com.aiden.trading.dto.PageReq;
+import com.aiden.trading.dto.Result;
 import com.aiden.trading.entity.QuartzJob;
 import com.aiden.trading.service.IQuartzJobService;
+import com.github.pagehelper.PageInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -18,11 +21,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/quartz-job")
 @Tag(name = "定时任务接口")
+@CrossOrigin
 public class QuartzJobController {
 
 
     @Resource
     private IQuartzJobService quartzJobService ;
+
+    @Operation(summary = "任务查询")
+    @PostMapping("/page")
+    public Result<PageInfo<QuartzJob>> page(@RequestBody PageReq pageReq){
+        PageInfo<QuartzJob> ret = quartzJobService.pageList(pageReq) ;
+        return Result.data(ret);
+    }
 
     @Operation(summary = "任务查询")
     @GetMapping("/job/{id}")
