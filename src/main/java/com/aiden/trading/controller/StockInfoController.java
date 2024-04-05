@@ -27,9 +27,10 @@ public class StockInfoController {
     private IStockInfoService stockInfoService;
     @GetMapping("/searchSymbols")
     public Result<List<SymbolResp>> searchSymbols(@RequestParam(value = "userInput",required = false) String userInput,
+                                                  @RequestParam(value = "ticker",required = false) String ticker,
                                                   @RequestParam(value = "exchange",required = false) String exchange,
                                                   @RequestParam(value = "symbolType",required = false) String symbolType) {
-        List<SymbolResp> ret = stockInfoService.searchSymbols(userInput,exchange,symbolType);
+        List<SymbolResp> ret = stockInfoService.searchSymbols(userInput,exchange,symbolType,ticker);
         return Result.data(ret);
     }
     @PostMapping("/getDayWeekYearData")

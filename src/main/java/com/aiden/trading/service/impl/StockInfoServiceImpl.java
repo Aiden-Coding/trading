@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -42,10 +43,18 @@ public class StockInfoServiceImpl extends ServiceImpl<StockInfoDao, StockInfo> i
     private AKshareApi aKshareApi;
 
     @Override
-    public List<SymbolResp> searchSymbols(String userInput, String exchange, String symbolType) {
+    public List<SymbolResp> searchSymbols(String userInput, String exchange, String symbolType,String ticker) {
         List<SymbolResp> ret = new ArrayList<>();
         log.info("param {} {} {}", userInput, symbolType, exchange);
         LambdaQueryWrapper<StockInfo> queryWrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.isNotBlank(ticker)) {
+            String[] s = ticker.split(":");
+            queryWrapper.eq(StockInfo::getExchangeCode,s[0]);
+            String[] s1 = s[1].split("/");
+
+            queryWrapper.eq(StockInfo::getCode,s1[0]);
+            queryWrapper.eq(StockInfo::getCurrency,s1[1]);
+        }
         List<StockInfo> list = baseMapper.selectList(queryWrapper);
         if (CollectionUtils.isNotEmpty(list)) {
             list.forEach(x -> {

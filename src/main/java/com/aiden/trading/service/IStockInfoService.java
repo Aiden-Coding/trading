@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface IStockInfoService extends IService<StockInfo> {
 
-    List<SymbolResp> searchSymbols(String userInput, String exchange, String symbolType);
+    List<SymbolResp> searchSymbols(String userInput, String exchange, String symbolType, String ticker);
 
     AkResult<?> getDayWeekYearData(DataDayWeekYearReq dataDayWeekYearReq);
 
