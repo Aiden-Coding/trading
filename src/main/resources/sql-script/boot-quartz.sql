@@ -61,7 +61,7 @@ drop table if exists `tv_chart_info`;
 CREATE TABLE `tv_chart_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `name` varchar(200) DEFAULT NULL COMMENT '名称',
-  `content` blob DEFAULT NULL COMMENT '内容',
+  `content` longblob DEFAULT NULL COMMENT '内容',
   `client` varchar(20) DEFAULT NULL COMMENT '客户端',
   `user` varchar(20) DEFAULT NULL COMMENT '用户id',
   `symbol` varchar(20) DEFAULT NULL COMMENT 'symbol',
