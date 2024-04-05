@@ -1,4 +1,18 @@
 
+drop table if exists `stock_info`;
+CREATE TABLE `stock_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `code` varchar(50) DEFAULT NULL COMMENT '代码',
+  `exchange` varchar(50) DEFAULT NULL COMMENT '交易所',
+  `exchange_code` varchar(50) DEFAULT NULL COMMENT '交易所代码',
+  `currency` varchar(50) DEFAULT NULL COMMENT '币种',
+  `name` varchar(20) DEFAULT NULL COMMENT '名称',
+  `list_date` datetime DEFAULT NULL COMMENT '上市日期',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='股票信息';
+
 drop table if exists `tv_drawing`;
 CREATE TABLE `tv_drawing` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',

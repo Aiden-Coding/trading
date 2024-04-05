@@ -139,5 +139,8 @@ pagehelper:
   #为了支持 startPage(Object params) 方法，增加了该参数来配置参数映射，用于从对象中根据属性名取值
   params: count=countSql
 
+remote:
+  baseUrl: http://192.168.0.208:8888
+
 
 

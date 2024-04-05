@@ -4,6 +4,8 @@ import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
@@ -15,17 +17,17 @@ import reactor.netty.tcp.TcpClient;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
-//@Configuration
+@Configuration
 public class WebClientConfig {
     @Value("${remote.baseUrl}")
     private String baseUrl;
 
-    @Value("${remote.xtquantUrl}")
-    private String xtquantUrl;
+//    @Value("${remote.xtquantUrl}")
+//    private String xtquantUrl;
 //    @Autowired
 //    private TokenHolder tokenHolder;
 
-//    @Bean
+    @Bean
     public WebClient webClient() {
         Integer time = 1000 * 60 * 100;
         TcpClient tcpClient = TcpClient
@@ -59,7 +61,7 @@ public class WebClientConfig {
                 .build();
     }
 
-//    @Bean
+    @Bean
     public AKshareApi aKshareApi(WebClient webClient) {
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builder(WebClientAdapter.forClient(webClient)).blockTimeout(Duration.ofSeconds(600)).build();
         return factory.createClient(AKshareApi.class);

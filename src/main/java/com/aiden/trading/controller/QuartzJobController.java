@@ -69,7 +69,8 @@ public class QuartzJobController {
 
     @Operation(summary = "执行一次")
     @GetMapping("/job/runOnce/{id}")
-    public void runOnce(@PathVariable("id") Integer id) {
+    public Result<?> runOnce(@PathVariable("id") Integer id) {
         quartzJobService.runOnce(id);
+        return Result.ok();
     }
 }
