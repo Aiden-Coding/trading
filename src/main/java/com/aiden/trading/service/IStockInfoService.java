@@ -1,7 +1,12 @@
 package com.aiden.trading.service;
 
+import com.aiden.trading.dto.AkResult;
+import com.aiden.trading.dto.stock.SymbolResp;
+import com.aiden.trading.dto.stock.req.DataDayWeekYearReq;
 import com.aiden.trading.entity.StockInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +18,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IStockInfoService extends IService<StockInfo> {
 
+    List<SymbolResp> searchSymbols(String userInput, String exchange, String symbolType);
+
+    AkResult<?> getDayWeekYearData(DataDayWeekYearReq dataDayWeekYearReq);
+
+    void tradeDate();
 }

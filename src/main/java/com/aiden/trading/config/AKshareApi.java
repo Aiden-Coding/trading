@@ -10,5 +10,5 @@ import org.springframework.web.service.annotation.PostExchange;
 public interface AKshareApi {
 
     @PostExchange("/ak/method")
-    AkResult pyMethod(@RequestBody AkShareReq akShareReq);
+    AkResult<?> pyMethod(@RequestBody AkShareReq akShareReq);
 }

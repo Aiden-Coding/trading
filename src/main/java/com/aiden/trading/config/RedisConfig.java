@@ -4,9 +4,10 @@ package com.aiden.trading.config;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * @author lixl
@@ -18,22 +19,17 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 public class RedisConfig {
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
-        RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(lettuceConnectionFactory);
-        // 设置key序列化方式string，RedisSerializer.string() 等价于 new StringRedisSerializer()
-        redisTemplate.setKeySerializer(RedisSerializer.string());
-        // 设置value的序列化方式json，使用GenericJackson2JsonRedisSerializer替换默认序列化，RedisSerializer.json() 等价于 new GenericJackson2JsonRedisSerializer()
-        redisTemplate.setValueSerializer(RedisSerializer.json());
-        // 设置hash的key的序列化方式
-        redisTemplate.setHashKeySerializer(RedisSerializer.string());
-        // 设置hash的value的序列化方式
-        redisTemplate.setHashValueSerializer(RedisSerializer.json());
-        // 使配置生效
-        redisTemplate.afterPropertiesSet();
-        return redisTemplate;
+    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<Object, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+        // 使用Jackson2JsonRedisSerializer来序列化和反序列化redis的value值（默认使用JDK的序列化方式）
+        Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
+        template.setValueSerializer(serializer);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(serializer);
+        return template;
     }
-
 
 
 }

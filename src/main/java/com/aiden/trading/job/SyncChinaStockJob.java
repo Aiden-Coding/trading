@@ -37,7 +37,7 @@ public class SyncChinaStockJob implements JobService {
         Map<String, Object> args = new HashMap<>();
         akShareReq.setArgs(args);
         args.put("symbol", "主板A股");
-        AkResult<List<Map<String, Object>>> ret = aKshareApi.pyMethod(akShareReq);
+        AkResult<List<Map<String, Object>>> ret = (AkResult<List<Map<String, Object>>>) aKshareApi.pyMethod(akShareReq);
         if (Objects.equals(ret.getCode(), 0)) {
             if (CollectionUtils.isNotEmpty(ret.getData())) {
                 for (Map<String, Object> dataItem : ret.getData()) {
