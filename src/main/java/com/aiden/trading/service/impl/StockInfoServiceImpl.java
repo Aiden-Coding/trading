@@ -55,6 +55,11 @@ public class StockInfoServiceImpl extends ServiceImpl<StockInfoDao, StockInfo> i
             queryWrapper.eq(StockInfo::getCode,s1[0]);
             queryWrapper.eq(StockInfo::getCurrency,s1[1]);
         }
+        if (StringUtils.isNotBlank(userInput)) {
+            queryWrapper.like(StockInfo::getCode,userInput)
+                    .or()
+                    .like(StockInfo::getName,userInput);
+        }
         List<StockInfo> list = baseMapper.selectList(queryWrapper);
         if (CollectionUtils.isNotEmpty(list)) {
             list.forEach(x -> {
