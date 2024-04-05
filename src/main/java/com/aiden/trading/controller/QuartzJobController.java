@@ -1,10 +1,10 @@
 package com.aiden.trading.controller;
 
 import com.aiden.trading.dto.PageReq;
+import com.aiden.trading.dto.PageResp;
 import com.aiden.trading.dto.Result;
 import com.aiden.trading.entity.QuartzJob;
 import com.aiden.trading.service.IQuartzJobService;
-import com.github.pagehelper.PageInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -30,8 +30,8 @@ public class QuartzJobController {
 
     @Operation(summary = "任务查询")
     @PostMapping("/page")
-    public Result<PageInfo<QuartzJob>> page(@RequestBody PageReq pageReq){
-        PageInfo<QuartzJob> ret = quartzJobService.pageList(pageReq) ;
+    public Result<PageResp<QuartzJob>> page(@RequestBody PageReq pageReq){
+        PageResp<QuartzJob> ret = quartzJobService.pageList(pageReq) ;
         return Result.data(ret);
     }
 

@@ -4,6 +4,7 @@ import com.aiden.trading.constant.JobStateEnum;
 import com.aiden.trading.dao.QuartzJobDao;
 import com.aiden.trading.dao.QuartzLogDao;
 import com.aiden.trading.dto.PageReq;
+import com.aiden.trading.dto.PageResp;
 import com.aiden.trading.entity.QuartzJob;
 import com.aiden.trading.scheduler.QuartzManage;
 import com.aiden.trading.service.IQuartzJobService;
@@ -124,11 +125,12 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobDao, QuartzJob> i
     }
 
     @Override
-    public PageInfo<QuartzJob> pageList(PageReq pageReq) {
+    public PageResp<QuartzJob> pageList(PageReq pageReq) {
         PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize());
         LambdaQueryWrapper<QuartzJob> queryWrapper = new LambdaQueryWrapper<>();
         List<QuartzJob> list = baseMapper.selectList(queryWrapper);
-        return new PageInfo<>(list) ;
+        PageInfo<QuartzJob> ret = new PageInfo<>(list) ;
+        return new PageResp<>(ret.getList(),ret.getTotal());
 
     }
 }

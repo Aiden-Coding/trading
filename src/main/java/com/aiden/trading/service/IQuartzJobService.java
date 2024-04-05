@@ -1,9 +1,9 @@
 package com.aiden.trading.service;
 
 import com.aiden.trading.dto.PageReq;
+import com.aiden.trading.dto.PageResp;
 import com.aiden.trading.entity.QuartzJob;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.github.pagehelper.PageInfo;
 
 /**
  * <p>
@@ -25,5 +25,5 @@ public interface IQuartzJobService extends IService<QuartzJob> {
     void resume(Integer id);
     void runOnce(Integer id);
 
-    PageInfo<QuartzJob> pageList(PageReq pageReq);
+    PageResp<QuartzJob> pageList(PageReq pageReq);
 }
