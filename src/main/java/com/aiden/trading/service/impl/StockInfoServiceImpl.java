@@ -60,6 +60,9 @@ public class StockInfoServiceImpl extends ServiceImpl<StockInfoDao, StockInfo> i
                     .or()
                     .like(StockInfo::getName,userInput);
         }
+        if (StringUtils.isNotBlank(exchange)) {
+            queryWrapper.like(StockInfo::getExchangeCode,exchange);
+        }
         List<StockInfo> list = baseMapper.selectList(queryWrapper);
         if (CollectionUtils.isNotEmpty(list)) {
             list.forEach(x -> {
