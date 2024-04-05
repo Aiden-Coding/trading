@@ -26,32 +26,33 @@ public class QuartzJobController {
 
 
     @Resource
-    private IQuartzJobService quartzJobService ;
+    private IQuartzJobService quartzJobService;
 
     @Operation(summary = "任务查询")
     @PostMapping("/page")
-    public Result<PageResp<QuartzJob>> page(@RequestBody PageReq pageReq){
-        PageResp<QuartzJob> ret = quartzJobService.pageList(pageReq) ;
+    public Result<PageResp<QuartzJob>> page(@RequestBody PageReq pageReq) {
+        PageResp<QuartzJob> ret = quartzJobService.pageList(pageReq);
         return Result.data(ret);
     }
 
     @Operation(summary = "任务查询")
     @GetMapping("/job/{id}")
-    public QuartzJob getById(@PathVariable Integer id){
-        return quartzJobService.getById(id) ;
+    public QuartzJob getById(@PathVariable Integer id) {
+        return quartzJobService.getById(id);
     }
 
     @Operation(summary = "任务新增")
     @PostMapping("/job")
-    public Result<?> insert(@RequestBody QuartzJob quartzJob){
-         quartzJobService.insert(quartzJob) ;
-         return Result.ok();
+    public Result<?> insert(@RequestBody QuartzJob quartzJob) {
+        quartzJobService.insert(quartzJob);
+        return Result.ok();
     }
 
     @Operation(summary = "更新任务")
     @PutMapping("/job")
-    public Integer update(@RequestBody QuartzJob quartzJob){
-        return quartzJobService.update(quartzJob) ;
+    public Result<?> update(@RequestBody QuartzJob quartzJob) {
+        quartzJobService.update(quartzJob);
+        return Result.ok();
     }
 
     @Operation(summary = "停止任务")
@@ -63,12 +64,12 @@ public class QuartzJobController {
     @Operation(summary = "恢复任务")
     @PutMapping("/job/resume/{id}")
     public void resume(@PathVariable("id") Integer id) {
-        quartzJobService.resume(id) ;
+        quartzJobService.resume(id);
     }
 
     @Operation(summary = "执行一次")
     @GetMapping("/job/runOnce/{id}")
     public void runOnce(@PathVariable("id") Integer id) {
-        quartzJobService.runOnce(id) ;
+        quartzJobService.runOnce(id);
     }
 }
