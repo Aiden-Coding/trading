@@ -65,8 +65,9 @@ public class SyncSZChinaStockJob implements JobService {
                         if (Objects.nonNull(stock)) {
                             stockInfo.setId(stock.getId());
                             stockInfoService.updateById(stockInfo);
+                        } else {
+                            stockInfoService.save(stockInfo);
                         }
-                        stockInfoService.save(stockInfo);
                     } catch (Exception e) {
                         log.error("{}",dataItem,e);
                     }
