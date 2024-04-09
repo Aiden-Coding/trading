@@ -1,4 +1,25 @@
 
+drop table if exists `stock_group`;
+CREATE TABLE `stock_group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(50) DEFAULT NULL COMMENT '代码',
+  `code` varchar(50) DEFAULT NULL COMMENT '代码',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='股票分组';
+
+
+drop table if exists `stock_group_item`;
+CREATE TABLE `stock_group_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `group_code` varchar(50) DEFAULT NULL COMMENT '代码',
+  `ticker` varchar(50) DEFAULT NULL COMMENT '代码',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='股票分组';
+
 drop table if exists `stock_info`;
 CREATE TABLE `stock_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
