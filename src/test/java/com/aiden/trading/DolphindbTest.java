@@ -307,7 +307,7 @@ public class DolphindbTest {
         prop.setProperty("user","admin");
         prop.setProperty("password","123456");
         prop.setProperty("sqlStd", SqlStdEnum.DolphinDB.getName());
-        String url = "jdbc:dolphindb://"+"127.0.0.1"+":"+"8031"+"?user=admin&password=123456";
+        String url = "jdbc:dolphindb://127.0.0.1:8031?user=admin&password=123456";
 
 //        prop.put("tableAlias","orders:dfs://test_stock1/orders,trades:dfs://test_stock1/trades,");
         Connection conn = new JDBCConnection(url,prop);
