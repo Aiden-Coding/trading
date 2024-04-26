@@ -1,7 +1,10 @@
 package com.aiden.trading;
 
+import com.dolphindb.jdbc.JDBCConnection;
+import com.dolphindb.jdbc.JDBCStatement;
 import com.xxdb.*;
 import com.xxdb.comm.ErrorCodeInfo;
+import com.xxdb.comm.SqlStdEnum;
 import com.xxdb.data.*;
 import com.xxdb.multithreadedtablewriter.MultithreadedTableWriter;
 import com.xxdb.route.PartitionedTableAppender;
@@ -9,10 +12,13 @@ import com.xxdb.streaming.client.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.sql.*;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * <a href="https://docs.dolphindb.cn/zh/api/java/java.html">...</a>
@@ -29,7 +35,7 @@ public class DolphindbTest {
 
     static {
         SimpleDBConnectionPoolConfig config = new SimpleDBConnectionPoolConfig();
-        config.setHostName("192.168.0.208");
+        config.setHostName("127.0.0.1");
         config.setPort(8031);
         config.setUserId("admin");
         config.setPassword("123456");
@@ -294,6 +300,54 @@ public class DolphindbTest {
         Thread.sleep(1000000000);
         client.unsubscribe("192.168.0.208", 8031, "trades","trades");
     }
+
+    @Test
+    public void testJdbc() throws SQLException {
+        Properties prop = new Properties();
+        prop.setProperty("user","admin");
+        prop.setProperty("password","123456");
+        prop.setProperty("sqlStd", SqlStdEnum.DolphinDB.getName());
+        String url = "jdbc:dolphindb://"+"127.0.0.1"+":"+"8031"+"?user=admin&password=123456";
+
+//        prop.put("tableAlias","orders:dfs://test_stock1/orders,trades:dfs://test_stock1/trades,");
+        Connection conn = new JDBCConnection(url,prop);
+        JDBCStatement stm = null;
+        try {
+            Class.forName("com.dolphindb.jdbc.Driver");
+            conn = DriverManager.getConnection(url);
+            stm = (JDBCStatement)conn.createStatement();
+            ResultSet rs = stm.executeQuery("select * from loadTable(\"dfs://test_stock1\",\"orders\")");
+            printData(rs);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Release
+            try {
+                if (stm != null)
+                    stm.close();
+            } catch (SQLException se2) {
+            }
+            // Rlease
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+    public static void printData(ResultSet rs) throws SQLException {
+        ResultSetMetaData resultSetMetaData = rs.getMetaData();
+        int len = resultSetMetaData.getColumnCount();
+        while (rs.next()) {
+            for (int i = 1; i <= len; ++i) {
+                System.out.print(
+                        MessageFormat.format("{0}: {1},    ", resultSetMetaData.getColumnName(i), rs.getObject(i)));
+            }
+            System.out.print("\n");
+        }
+    }
+
 }
 
 class MyHandler implements MessageHandler {

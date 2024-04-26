@@ -192,6 +192,14 @@
             <artifactId>ta-lib</artifactId>
             <version>0.4.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.dolphindb/jdbc -->
+        <dependency>
+            <groupId>com.dolphindb</groupId>
+            <artifactId>jdbc</artifactId>
+            <version>3.00.0.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>
