@@ -244,6 +244,7 @@ services:
   dolphindb:
     image: dolphindb/dolphindb:v3.00.0
     container_name: dolphindb_compose
+    restart: always
     hostname: dolphindb
     ports:
       - "8031:8848"
