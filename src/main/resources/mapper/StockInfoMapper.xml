@@ -13,13 +13,14 @@
         <result column="currency" property="currency" />
         <result column="name" property="name" />
         <result column="list_date" property="listDate" />
+        <result column="ths_code" property="thsCode" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         create_time,
         update_time,
-        id, `code`, `exchange`, exchange_code, currency, `name`, list_date
+        id, `code`, `exchange`, exchange_code, currency, `name`, list_date, ths_code
     </sql>
 
 </mapper>

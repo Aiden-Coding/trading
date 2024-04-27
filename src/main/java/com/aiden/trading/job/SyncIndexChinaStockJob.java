@@ -47,7 +47,8 @@ public class SyncIndexChinaStockJob implements JobService {
                         stockInfo.setExchangeCode("CHINA");
                         stockInfo.setCurrency("RMB");
                         stockInfo.setCode((String) dataItem.get("index_code"));
-                        stockInfo.setName((String) dataItem.get("index_name"));
+                        stockInfo.setCode((String) dataItem.get("index_code"));
+                        stockInfo.setThsCode((String) dataItem.get("ths_code"));
                         StockInfo stock = stockInfoService.getOne(queryWrapper);
                         if (Objects.nonNull(stock)) {
                             stockInfo.setId(stock.getId());

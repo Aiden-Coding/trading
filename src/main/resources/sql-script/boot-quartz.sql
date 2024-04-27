@@ -24,6 +24,7 @@ drop table if exists `stock_info`;
 CREATE TABLE `stock_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `code` varchar(50) DEFAULT NULL COMMENT '代码',
+  `ths_code` varchar(50) DEFAULT NULL COMMENT '代码',
   `exchange` varchar(50) DEFAULT NULL COMMENT '交易所',
   `exchange_code` varchar(50) DEFAULT NULL COMMENT '交易所代码',
   `currency` varchar(50) DEFAULT NULL COMMENT '币种',

@@ -72,6 +72,9 @@ public class StockInfoServiceImpl extends ServiceImpl<StockInfoDao, StockInfo> i
                 it.setDescription(x.getName());
                 it.setType("stock");
                 it.setExchangeCode(x.getExchangeCode());
+                if (Objects.equals(x.getExchangeCode(),"CHINA")) {
+                    it.setSupported_resolutions(List.of("1D","1W","1M"));
+                }
                 ret.add(it);
             });
         }
@@ -98,31 +101,49 @@ public class StockInfoServiceImpl extends ServiceImpl<StockInfoDao, StockInfo> i
 
         }
         if (StringUtils.isNotBlank(dataDayWeekYearReq.getExchange()) && Objects.equals(dataDayWeekYearReq.getExchange(),"CHINA")) {
-
-        }
-        AkShareReq akShareReq = new AkShareReq();
-        akShareReq.setMethod("stock_zh_a_hist");
-        Map<String, Object> args = new HashMap<>();
-        akShareReq.setArgs(args);
-        args.put("symbol", dataDayWeekYearReq.getSymbol());
-        //period='daily'; choice of {'daily', 'weekly', 'monthly'}
-        String period = "daily";
-        if (Objects.equals("1D", dataDayWeekYearReq.getResolution())) {
-            period = "daily";
-        } else if (Objects.equals("1W", dataDayWeekYearReq.getResolution())) {
-            period = "weekly";
-        } else if (Objects.equals("1M", dataDayWeekYearReq.getResolution())) {
-            period = "monthly";
-        }
-        args.put("period", period);
+            LambdaQueryWrapper<StockInfo> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(StockInfo::getCode,dataDayWeekYearReq.getSymbol());
+            queryWrapper.eq(StockInfo::getExchangeCode,dataDayWeekYearReq.getExchange());
+            StockInfo stockInfo = baseMapper.selectOne(queryWrapper);
+            if (Objects.isNull(stockInfo)) {
+                return null;
+            }
+            AkShareReq akShareReq = new AkShareReq();
+            akShareReq.setMethod("stock_board_industry_index_ths");
+            Map<String, Object> args = new HashMap<>();
+            akShareReq.setArgs(args);
+            args.put("symbol", stockInfo.getThsCode());
 //        start_date="20210101"
-        args.put("start_date",  DateFormatUtils.format(new Date(dataDayWeekYearReq.getFrom()*1000L),"yyyyMMdd"));
+            args.put("start_date", DateFormatUtils.format(new Date(dataDayWeekYearReq.getFrom() * 1000L), "yyyyMMdd"));
 //        end_date="20210601"
-        args.put("end_date", DateFormatUtils.format(new Date(dataDayWeekYearReq.getTo()*1000L),"yyyyMMdd"));
+            args.put("end_date", DateFormatUtils.format(new Date(dataDayWeekYearReq.getTo() * 1000L), "yyyyMMdd"));
+            AkResult<?> ret = aKshareApi.pyMethod(akShareReq);
+            return ret;
+        } else {
+            AkShareReq akShareReq = new AkShareReq();
+            akShareReq.setMethod("stock_zh_a_hist");
+            Map<String, Object> args = new HashMap<>();
+            akShareReq.setArgs(args);
+            args.put("symbol", dataDayWeekYearReq.getSymbol());
+            //period='daily'; choice of {'daily', 'weekly', 'monthly'}
+            String period = "daily";
+            if (Objects.equals("1D", dataDayWeekYearReq.getResolution())) {
+                period = "daily";
+            } else if (Objects.equals("1W", dataDayWeekYearReq.getResolution())) {
+                period = "weekly";
+            } else if (Objects.equals("1M", dataDayWeekYearReq.getResolution())) {
+                period = "monthly";
+            }
+            args.put("period", period);
+//        start_date="20210101"
+            args.put("start_date", DateFormatUtils.format(new Date(dataDayWeekYearReq.getFrom() * 1000L), "yyyyMMdd"));
+//        end_date="20210601"
+            args.put("end_date", DateFormatUtils.format(new Date(dataDayWeekYearReq.getTo() * 1000L), "yyyyMMdd"));
 //        默认 adjust="", 则返回未复权的数据; adjust="qfq" 则返回前复权的数据, adjust="hfq" 则返回后复权的数据,
 //        args.put("adjust", "主板A股");
-        AkResult<?> ret = aKshareApi.pyMethod(akShareReq);
-        return ret;
+            AkResult<?> ret = aKshareApi.pyMethod(akShareReq);
+            return ret;
+        }
     }
 
     @Override

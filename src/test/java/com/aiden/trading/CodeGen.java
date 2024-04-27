@@ -20,7 +20,7 @@ import java.util.Collections;
 
 public class CodeGen {
     // 数据库连接字段配置
-    private static final String JDBC_URL = "jdbc:mysql://192.168.0.208:8003/trading?characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSl=true";
+    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:8003/trading?characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSl=true";
     private static final String JDBC_USER_NAME = "root";
     private static final String JDBC_PASSWORD = "123456";
 
@@ -28,7 +28,7 @@ public class CodeGen {
     private static final String PACKAGE_NAME = "com.aiden.trading";
 
     // 表名,多个表使用英文逗号分割
-    private static final String[] TBL_NAMES = {"stock_group_item"};
+    private static final String[] TBL_NAMES = {"stock_info"};
 
     // 表名的前缀,从表生成代码时会去掉前缀
     private static final String TABLE_PREFIX = "tb_";

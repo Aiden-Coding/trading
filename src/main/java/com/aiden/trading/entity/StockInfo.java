@@ -53,4 +53,7 @@ public class StockInfo extends BaseEntity {
     @Schema(description = "上市日期")
     @TableField("list_date")
     private LocalDateTime listDate;
+
+    @TableField("ths_code")
+    private String thsCode;
 }
