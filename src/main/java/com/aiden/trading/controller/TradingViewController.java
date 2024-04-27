@@ -394,8 +394,6 @@ public class TradingViewController {
      */
     @GetMapping("/timescale_marks")
     public List<?> timescale_marks(@RequestParam("symbol") String symbol, @RequestParam("resolution") String resolution, @RequestParam("from") Long from, @RequestParam("to") Long to) {
-
-
         return Collections.EMPTY_LIST;
     }
 

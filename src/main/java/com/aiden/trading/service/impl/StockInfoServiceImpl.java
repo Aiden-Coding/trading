@@ -80,6 +80,7 @@ public class StockInfoServiceImpl extends ServiceImpl<StockInfoDao, StockInfo> i
 
     @Override
     public AkResult<?> getDayWeekYearData(DataDayWeekYearReq dataDayWeekYearReq) {
+
         if (Objects.nonNull(dataDayWeekYearReq.getFrom()) && Objects.nonNull(dataDayWeekYearReq.getTo())) {
             // 将时间戳转换为 Instant 对象
             Instant instant = Instant.ofEpochMilli(dataDayWeekYearReq.getFrom() * 1000L);
@@ -94,6 +95,9 @@ public class StockInfoServiceImpl extends ServiceImpl<StockInfoDao, StockInfo> i
             if (daysBetween == 1) {
                 dataDayWeekYearReq.setFrom(dataDayWeekYearReq.getFrom() - 24*60*60*3L);
             }
+
+        }
+        if (StringUtils.isNotBlank(dataDayWeekYearReq.getExchange()) && Objects.equals(dataDayWeekYearReq.getExchange(),"CHINA")) {
 
         }
         AkShareReq akShareReq = new AkShareReq();
