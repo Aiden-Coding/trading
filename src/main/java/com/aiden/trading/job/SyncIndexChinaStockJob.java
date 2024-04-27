@@ -33,6 +33,7 @@ public class SyncIndexChinaStockJob implements JobService {
         akShareReq.setMethod("stock_index_list_ths");
         Map<String, Object> args = new HashMap<>();
         akShareReq.setArgs(args);
+        @SuppressWarnings("unchecked")
         AkResult<List<Map<String, Object>>> ret = (AkResult<List<Map<String, Object>>>) aKshareApi.pyMethod(akShareReq);
         if (Objects.equals(ret.getCode(), 0)) {
             if (CollectionUtils.isNotEmpty(ret.getData())) {

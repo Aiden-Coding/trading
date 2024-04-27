@@ -117,8 +117,7 @@ public class StockInfoServiceImpl extends ServiceImpl<StockInfoDao, StockInfo> i
             args.put("start_date", DateFormatUtils.format(new Date(dataDayWeekYearReq.getFrom() * 1000L), "yyyyMMdd"));
 //        end_date="20210601"
             args.put("end_date", DateFormatUtils.format(new Date(dataDayWeekYearReq.getTo() * 1000L), "yyyyMMdd"));
-            AkResult<?> ret = aKshareApi.pyMethod(akShareReq);
-            return ret;
+            return aKshareApi.pyMethod(akShareReq);
         } else {
             AkShareReq akShareReq = new AkShareReq();
             akShareReq.setMethod("stock_zh_a_hist");
@@ -141,8 +140,7 @@ public class StockInfoServiceImpl extends ServiceImpl<StockInfoDao, StockInfo> i
             args.put("end_date", DateFormatUtils.format(new Date(dataDayWeekYearReq.getTo() * 1000L), "yyyyMMdd"));
 //        默认 adjust="", 则返回未复权的数据; adjust="qfq" 则返回前复权的数据, adjust="hfq" 则返回后复权的数据,
 //        args.put("adjust", "主板A股");
-            AkResult<?> ret = aKshareApi.pyMethod(akShareReq);
-            return ret;
+            return aKshareApi.pyMethod(akShareReq);
         }
     }
 
