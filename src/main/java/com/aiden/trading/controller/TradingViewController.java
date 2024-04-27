@@ -145,9 +145,11 @@ public class TradingViewController {
             reta.setData(studyTemplateInfo);
             return reta;
         }
+        List<Map<String, Object>> retData = tvChartInfoService.getChartInfos(user, client);
         TvResult<List<Map<String, Object>>> ret = new TvResult<>();
+
         ret.setStatus(TradingViewConstant.Ok);
-        ret.setData(tvChartInfoService.getChartInfos(user, client));
+        ret.setData(retData);
         return ret;
     }
 
