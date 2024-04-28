@@ -12,9 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/user")
 @Tag(name = "认证")
-public class AuthController {
+public class UserController {
     // 测试登录，浏览器访问： http://localhost:8081/user/doLogin?username=zhang&password=123456
     @PostMapping("doLogin")
     public Result<?> doLogin(@RequestBody LoginReq loginReq) {
@@ -31,9 +31,12 @@ public class AuthController {
     }
 
     // 查询登录状态，浏览器访问： http://localhost:8081/user/isLogin
-    @GetMapping("isLogin")
-    public String isLogin() {
-        return "当前会话是否登录：" + StpUtil.isLogin();
+    @GetMapping("getUserInfo")
+    public Result<?> getUserInfo() {
+        Map<String,String> ret = new HashMap<>();
+        ret.put("username","hell");
+        ret.put("realName","helwl");
+        return Result.data(ret);
     }
 
     // 查询 Token 信息  ---- http://localhost:8081/acc/tokenInfo
