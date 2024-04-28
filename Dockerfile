@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk-slim
+FROM tradingview:java
 
 WORKDIR /app
 ADD target/trading.jar app.jar
