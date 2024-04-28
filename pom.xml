@@ -11,6 +11,7 @@
 
     <!-- 版本管理 -->
     <properties>
+        <docker.image.prefix>tradingview</docker.image.prefix>
         <!-- 编译管理 -->
         <java.version>21</java.version>
         <compile.jdk.version>21</compile.jdk.version>
