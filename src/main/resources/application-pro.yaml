@@ -11,7 +11,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       # 数据库
-      url: jdbc:mysql://192.168.0.208:8003/trading?useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull&useSSL=true
+      url: jdbc:mysql://172.25.160.1:8003/trading?useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull&useSSL=true
       username: root
       password: 123456
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -59,7 +59,7 @@ spring:
             class: org.quartz.simpl.SimpleThreadPool
   data:
     redis:
-      host: 192.168.0.208
+      host: 172.25.160.1
       port: 8018
       database: 1
       password: ningzaichun
@@ -121,7 +121,7 @@ knife4j:
 #    password: 123456
 
 dolphindb:
-  host_name: 192.168.0.208
+  host_name: 172.25.160.1
   port: 8031
   user_id: admin
   password: 123456
@@ -140,7 +140,7 @@ pagehelper:
   params: count=countSql
 
 remote:
-  baseUrl: http://192.168.0.208:8888
+  baseUrl: http://172.25.160.1:8888
 
 
 
