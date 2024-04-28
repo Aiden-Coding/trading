@@ -1,0 +1,69 @@
+version: '3.8'
+services:
+#  mysql5.7:
+#    hostname: mysql
+#    container_name: mysql5.7
+#    image: mysql:5.7.31
+#    restart: always
+#    ports:
+#      - "8003:3306"
+#    #privileged: true
+#    # volumes:
+#    #   - /data/mysql:/var/lib/mysql
+#    environment:
+#      MYSQL_ROOT_PASSWORD: "123456"
+#      TZ: Asia/Shanghai
+#    command: [
+#      '--character-set-server=utf8mb4',
+#      '--collation-server=utf8mb4_general_ci',
+#      '--max_connections=3000',
+#      '--lower_case_table_names=1'
+#    ]
+#  rabbitmq:
+#    restart: always
+#    image: rabbitmq:management
+#    container_name: rabbitmq
+#    hostname: rabbit
+#    ports:
+#      - 8011:5672
+#      - 8012:15672
+#    environment:
+#      TZ: Asia/Shanghai
+#      RABBITMQ_DEFAULT_USER: rabbit
+#      RABBITMQ_DEFAULT_PASS: 123456
+#  redis:
+#    image: redis:7.0.12
+#    container_name: redis
+#    hostname: redis
+#    restart: always
+#    ports:
+#      - 8018:6379
+#    environment:
+#      TZ: Asia/Shanghai
+#    command: [
+#      '--requirepass ningzaichun'
+#    ]
+#  dolphindb:
+#    image: dolphindb/dolphindb:v3.00.0
+#    container_name: dolphindb_compose
+#    restart: always
+#    hostname: dolphindb
+#    ports:
+#      - "8031:8848"
+#    command: sh
+#    设置时区无法启动  不知道什么原因
+#    environment:
+#      - TZ=Asia/Shanghai  # 设置时区为上海
+  trading_view_java:
+    image: tradingview:java
+    container_name: trading_view_java
+    hostname: trading_view_java
+    restart: always
+    ports:
+      - 10001:10008
+    environment:
+      TZ: Asia/Shanghai
+networks:
+  trading_view_net:
+    external: false
+
