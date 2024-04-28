@@ -8,6 +8,9 @@ import com.aiden.trading.dto.user.req.LoginReq;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "认证")
@@ -16,12 +19,11 @@ public class AuthController {
     @PostMapping("doLogin")
     public Result<?> doLogin(@RequestBody LoginReq loginReq) {
         // 此处仅作模拟示例，真实项目需要从数据库中查询数据进行比对
-        if("zhang".equals(loginReq.getPassword()) && "123456".equals(loginReq.getUsername())) {
+        if("vben".equals(loginReq.getUsername()) && "123456".equals(loginReq.getPassword())) {
             StpUtil.login(10001);
-
             // 第2步，获取 Token  相关参数
             SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
-            return Result.data(tokenInfo);
+            return Result.data(tokenInfo.getTokenValue());
         }
 
 

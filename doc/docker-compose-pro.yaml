@@ -63,6 +63,15 @@ services:
       - 10001:10008
     environment:
       TZ: Asia/Shanghai
+  trading_view_web:
+    image: tradingview:web
+    container_name: trading_view_web
+    hostname: trading_view_web
+    restart: always
+    ports:
+      - 10002:80
+    environment:
+      TZ: Asia/Shanghai
 networks:
   trading_view_net:
     external: false
