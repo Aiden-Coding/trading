@@ -102,6 +102,7 @@ services:
       # 用来进行选举的Controller服务器，如果有多个Controller则都需要写上，这里本机
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@127.0.0.1:9094
       - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_MESSAGE_MAX_BYTES=10485760
       # 开启JMX监控
       - JMX_PORT=9998
       - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka -Dcom.sun.management.jmxremote.rmi.port=9998
@@ -116,10 +117,10 @@ services:
       KAFKA_CLUSTERS_0_NAME: kafka-stand-alone
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
       KAFKA_CLUSTERS_0_METRICS_PORT: 9998
-      SERVER_SERVLET_CONTEXT_PATH: /kafkaui
+#      SERVER_SERVLET_CONTEXT_PATH: /kafkaui
       AUTH_TYPE: "LOGIN_FORM"
       SPRING_SECURITY_USER_NAME: admin
-      SPRING_SECURITY_USER_PASSWORD: kafkauipassword
+      SPRING_SECURITY_USER_PASSWORD: 123456
       DYNAMIC_CONFIG_ENABLED: 'true'
 volumes:
   kafka_standalone_data:
