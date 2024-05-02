@@ -1,5 +1,7 @@
 package com.aiden.trading.service;
 
+import com.aiden.trading.dto.PageReq;
+import com.aiden.trading.dto.PageResp;
 import com.aiden.trading.entity.StockGn;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IStockGnService extends IService<StockGn> {
 
+    PageResp<StockGn> pageList(PageReq pageReq);
 }

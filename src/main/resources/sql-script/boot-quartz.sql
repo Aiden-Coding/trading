@@ -1,4 +1,7 @@
 
+alter  table stock_gn add column
+  `event` varchar(300) DEFAULT NULL COMMENT '事件';
+
 drop table if exists `user_info`;
 CREATE TABLE `user_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
