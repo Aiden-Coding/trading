@@ -12,6 +12,10 @@ CREATE TABLE `user_info` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户';
 
+INSERT INTO trading.user_info
+(id, username, password, realName, avatar, `desc`, create_time, update_time)
+VALUES(1, 'vben', '123456', 'vben', NULL, 'vben', NULL, NULL);
+
 drop table if exists `stock_group`;
 CREATE TABLE `stock_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
