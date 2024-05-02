@@ -1,15 +1,15 @@
 package com.aiden.trading.entity;
 
-import com.aiden.trading.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.time.LocalDateTime;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -57,4 +57,8 @@ public class StockGn extends BaseEntity {
     @Schema(description = "代码")
     @TableField("event_url")
     private String eventUrl;
+
+    @Schema(description = "事件")
+    @TableField("`event`")
+    private String event;
 }

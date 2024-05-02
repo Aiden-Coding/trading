@@ -55,6 +55,9 @@ public class SyncGnChinaStockJob implements JobService {
                         if (Objects.nonNull(dataItem.get("驱动事件网址")) && StringUtils.isNotBlank((String) dataItem.get("驱动事件网址"))) {
                             stockInfo.setEventUrl((String) dataItem.get("驱动事件网址"));
                         }
+                        if (Objects.nonNull(dataItem.get("驱动事件")) && StringUtils.isNotBlank((String) dataItem.get("驱动事件"))) {
+                            stockInfo.setEvent((String) dataItem.get("驱动事件"));
+                        }
                         stockInfo.setSource("THS");
 
                         if (Objects.nonNull(dataItem.get("日期"))) {

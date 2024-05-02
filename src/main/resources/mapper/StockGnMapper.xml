@@ -14,13 +14,14 @@
         <result column="url" property="url" />
         <result column="list_date" property="listDate" />
         <result column="event_url" property="eventUrl" />
+        <result column="event" property="event" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         create_time,
         update_time,
-        id, `name`, `code`, ex_code, `source`, url, list_date, event_url
+        id, `name`, `code`, ex_code, `source`, url, list_date, event_url, `event`
     </sql>
 
 </mapper>
