@@ -16,19 +16,6 @@ INSERT INTO trading.user_info
 (id, username, password, realName, avatar, `desc`, create_time, update_time)
 VALUES(1, 'vben', '123456', 'vben', NULL, 'vben', NULL, NULL);
 
-drop table if exists `stock_group`;
-CREATE TABLE `stock_group` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(50) DEFAULT NULL COMMENT '代码',
-  `code` varchar(50) DEFAULT NULL COMMENT '代码',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='股票分组';
-
-
-
-
 drop table if exists `stock_gn`;
 CREATE TABLE `stock_gn` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -48,12 +35,22 @@ CREATE TABLE `stock_gn` (
 drop table if exists `stock_gn_item`;
 CREATE TABLE `stock_gn_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `gn_id` int(11) NOT NULL',
+  `gn_id` int(11) NOT NULL,
   `stock_id` int(11) NOT NULL,
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='股票成分';
+
+drop table if exists `stock_group`;
+CREATE TABLE `stock_group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(50) DEFAULT NULL COMMENT '代码',
+  `code` varchar(50) DEFAULT NULL COMMENT '代码',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='股票分组';
 
 drop table if exists `stock_group_item`;
 CREATE TABLE `stock_group_item` (
