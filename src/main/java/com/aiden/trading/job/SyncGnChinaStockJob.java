@@ -4,8 +4,11 @@ import com.aiden.trading.config.AKshareApi;
 import com.aiden.trading.dto.AkResult;
 import com.aiden.trading.dto.akshare.AkShareReq;
 import com.aiden.trading.entity.StockGn;
+import com.aiden.trading.entity.StockGnItem;
+import com.aiden.trading.entity.StockInfo;
 import com.aiden.trading.service.IStockGnItemService;
 import com.aiden.trading.service.IStockGnService;
+import com.aiden.trading.service.IStockInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import jakarta.annotation.Resource;
@@ -29,6 +32,8 @@ public class SyncGnChinaStockJob implements JobService {
     private IStockGnService stockGnService;
     @Resource
     private IStockGnItemService stockGnItemService;
+    @Resource
+    private IStockInfoService stockInfoService;
 
     @Override
     public void run(String params) {
@@ -77,6 +82,39 @@ public class SyncGnChinaStockJob implements JobService {
                             stockGnService.updateById(stockInfo);
                         } else {
                             stockGnService.save(stockInfo);
+                        }
+                        //成分股
+                        //stock_board_concept_cons_code_ths
+                        AkShareReq akShareReq1 = new AkShareReq();
+                        akShareReq1.setMethod("stock_board_concept_cons_code_ths");
+                        Map<String, Object> args1 = new HashMap<>();
+                        akShareReq1.setArgs(args1);
+                        args1.put("symbol",(String) dataItem.get("代码"));
+                        @SuppressWarnings("unchecked")
+                        AkResult<List<Map<String, Object>>> ret1 = (AkResult<List<Map<String, Object>>>) aKshareApi.pyMethod(akShareReq1);
+                        if (Objects.equals(ret1.getCode(), 0)) {
+                            if (CollectionUtils.isNotEmpty(ret1.getData())) {
+                                for (Map<String, Object> dataItem1 : ret1.getData()) {
+                                    String code1 = (String) dataItem1.get("代码");
+                                    LambdaQueryWrapper<StockInfo> queryWrapper12 = new LambdaQueryWrapper<>();
+                                    queryWrapper12.eq(StockInfo::getCode,code1);
+                                    queryWrapper12.and(qw -> qw.eq(StockInfo::getExchangeCode, "SH").or(qw1 -> qw1.eq(StockInfo::getExchangeCode, "SZ")));
+                                    StockInfo stockInfo1 = stockInfoService.getOne(queryWrapper12);
+                                    if (Objects.nonNull(stockInfo1)) {
+                                        LambdaQueryWrapper<StockGnItem> queryWrapper1 = new LambdaQueryWrapper<>();
+                                        queryWrapper1.eq(StockGnItem::getGnId, stockInfo.getId());
+                                        queryWrapper1.eq(StockGnItem::getStockId, stockInfo1.getId());
+                                        StockGnItem exit = stockGnItemService.getOne(queryWrapper1);
+                                        if (Objects.nonNull(exit)) {
+                                            continue;
+                                        }
+                                        exit = new StockGnItem();
+                                        exit.setStockId(stockInfo1.getId());
+                                        exit.setGnId(stock.getId());
+                                        stockGnItemService.save(exit);
+                                    }
+                                }
+                            }
                         }
                     } catch (Exception e) {
                         log.error("dataItem:{}",dataItem.get("代码"),e);
