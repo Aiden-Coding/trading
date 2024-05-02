@@ -69,7 +69,7 @@ public class TvChartInfoServiceImpl extends ServiceImpl<TvChartInfoDao, TvChartI
                 tvChartInfo.setName(saveChartReq.getName());
                 tvChartInfo.setClient(saveChartReq.getClient());
                 tvChartInfo.setUser(saveChartReq.getUser());
-                tvChartInfo.setTimestamp((int) (System.currentTimeMillis()/1000));
+                tvChartInfo.setTimestamp((int) (System.currentTimeMillis() / 1000));
                 baseMapper.updateById(tvChartInfo);
                 return tvChartInfo;
             }
@@ -80,7 +80,7 @@ public class TvChartInfoServiceImpl extends ServiceImpl<TvChartInfoDao, TvChartI
         tvChartInfo.setName(saveChartReq.getName());
         tvChartInfo.setClient(saveChartReq.getClient());
         tvChartInfo.setUser(saveChartReq.getUser());
-        tvChartInfo.setTimestamp((int) (System.currentTimeMillis()/1000));
+        tvChartInfo.setTimestamp((int) (System.currentTimeMillis() / 1000));
         tvChartInfo.setContent(saveChartReq.getContent().getBytes());
         baseMapper.insert(tvChartInfo);
         return tvChartInfo;
@@ -93,5 +93,14 @@ public class TvChartInfoServiceImpl extends ServiceImpl<TvChartInfoDao, TvChartI
         queryWrapper.eq(TvChartInfo::getUser, user);
         queryWrapper.eq(TvChartInfo::getClient, client);
         baseMapper.delete(queryWrapper);
+    }
+
+    @Override
+    public Boolean isFirst(String loginId, String clientId) {
+        LambdaQueryWrapper<TvChartInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(TvChartInfo::getUser, loginId);
+        queryWrapper.eq(TvChartInfo::getClient, clientId);
+        TvChartInfo tvChartInfo = baseMapper.selectOne(queryWrapper);
+        return !Objects.nonNull(tvChartInfo);
     }
 }

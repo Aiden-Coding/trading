@@ -1,6 +1,8 @@
 package com.aiden.trading.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.aiden.trading.constant.TradingViewConstant;
+import com.aiden.trading.dto.Result;
 import com.aiden.trading.dto.TvResult;
 import com.aiden.trading.dto.tradingview.ChartInfo;
 import com.aiden.trading.dto.tradingview.StudyTemplateInfo;
@@ -395,6 +397,14 @@ public class TradingViewController {
     @GetMapping("/timescale_marks")
     public List<?> timescale_marks(@RequestParam("symbol") String symbol, @RequestParam("resolution") String resolution, @RequestParam("from") Long from, @RequestParam("to") Long to) {
         return Collections.EMPTY_LIST;
+    }
+    @GetMapping("/isFirst")
+    public Result<Boolean> isFirst(@RequestParam("clientId") String clientId) {
+        if (StpUtil.isLogin()) {
+            Boolean isFirst = tvChartInfoService.isFirst((String)StpUtil.getLoginId(),clientId);
+            return Result.data(isFirst);
+        }
+        return Result.data(true);
     }
 
 }

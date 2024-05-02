@@ -25,4 +25,6 @@ public interface ITvChartInfoService extends IService<TvChartInfo> {
     TvChartInfo saveChart(SaveChartReq saveChartReq);
 
     void deleteChart(String client, String user, Integer chart);
+
+    Boolean isFirst(String loginId, String clientId);
 }
