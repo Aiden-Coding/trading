@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author zd
- * @since 2024-04-27 14:19:52
+ * @since 2024-05-02 08:45:00
  */
 @Getter
 @Setter
@@ -53,4 +53,8 @@ public class StockGn extends BaseEntity {
     @Schema(description = "上市日期")
     @TableField("list_date")
     private LocalDateTime listDate;
+
+    @Schema(description = "代码")
+    @TableField("event_url")
+    private String eventUrl;
 }

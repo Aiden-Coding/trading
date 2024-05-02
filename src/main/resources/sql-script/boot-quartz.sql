@@ -20,6 +20,7 @@ CREATE TABLE `stock_gn` (
   `ex_code` varchar(50) DEFAULT NULL COMMENT '代码',
   `source` varchar(50) DEFAULT NULL COMMENT '代码',
   `url` varchar(300) DEFAULT NULL COMMENT '代码',
+  `event_url` varchar(300) DEFAULT NULL COMMENT '代码',
   `list_date` datetime DEFAULT NULL COMMENT '上市日期',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',

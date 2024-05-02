@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author zd
- * @since 2024-04-27 14:19:52
+ * @since 2024-05-02 08:45:00
  */
 @RestController
 @RequestMapping("/stock-gn")

@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -50,6 +51,9 @@ public class SyncGnChinaStockJob implements JobService {
                         stockInfo.setName((String) dataItem.get("概念名称"));
                         if (Objects.nonNull(dataItem.get("网址"))) {
                             stockInfo.setUrl((String) dataItem.get("网址"));
+                        }
+                        if (Objects.nonNull(dataItem.get("驱动事件网址")) && StringUtils.isNotBlank((String) dataItem.get("驱动事件网址"))) {
+                            stockInfo.setEventUrl((String) dataItem.get("驱动事件网址"));
                         }
                         stockInfo.setSource("THS");
 
