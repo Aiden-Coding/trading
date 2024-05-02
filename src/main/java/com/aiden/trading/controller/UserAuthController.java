@@ -2,7 +2,6 @@ package com.aiden.trading.controller;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.dev33.satoken.util.SaResult;
 import com.aiden.trading.dto.Result;
 import com.aiden.trading.dto.user.req.LoginReq;
 import com.aiden.trading.entity.UserInfo;
@@ -36,9 +35,9 @@ public class UserAuthController {
     }
 
     @GetMapping("doLogout")
-    public SaResult logout() {
+    public Result<?> logout() {
         StpUtil.logout();
-        return SaResult.ok();
+        return Result.ok();
     }
 
 }
