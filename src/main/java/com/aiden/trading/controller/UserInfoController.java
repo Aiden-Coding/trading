@@ -1,9 +1,6 @@
 package com.aiden.trading.controller;
 
-import cn.dev33.satoken.stp.StpUtil;
-import cn.dev33.satoken.util.SaResult;
 import com.aiden.trading.dto.Result;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,10 +8,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * <p>
+ * 用户 前端控制器
+ * </p>
+ *
+ * @author zd
+ * @since 2024-05-02 13:56:10
+ */
 @RestController
-@Tag(name = "认证")
 @RequestMapping("/user")
-public class UserController {
+public class UserInfoController {
 
 
     // 查询登录状态，浏览器访问： http://localhost:8081/user/isLogin
@@ -25,18 +29,4 @@ public class UserController {
         ret.put("realName","helwl");
         return Result.data(ret);
     }
-
-    // 查询 Token 信息  ---- http://localhost:8081/acc/tokenInfo
-    @GetMapping("tokenInfo")
-    public SaResult tokenInfo() {
-        return SaResult.data(StpUtil.getTokenInfo());
-    }
-
-    // 测试注销  ---- http://localhost:8081/acc/logout
-    @GetMapping("logout")
-    public SaResult logout() {
-        StpUtil.logout();
-        return SaResult.ok();
-    }
-
 }

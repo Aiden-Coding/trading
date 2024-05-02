@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "认证")
-public class AuthController {
+public class UserAuthController {
+
     // 测试登录，浏览器访问： http://localhost:8081/user/doLogin?username=zhang&password=123456
     @PostMapping("doLogin")
     public Result<?> doLogin(@RequestBody LoginReq loginReq) {
@@ -22,8 +23,6 @@ public class AuthController {
             SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
             return Result.data(tokenInfo);
         }
-
-
         return Result.error("登录失败");
     }
 

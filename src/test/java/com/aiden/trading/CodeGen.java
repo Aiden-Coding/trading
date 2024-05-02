@@ -28,7 +28,7 @@ public class CodeGen {
     private static final String PACKAGE_NAME = "com.aiden.trading";
 
     // 表名,多个表使用英文逗号分割
-    private static final String[] TBL_NAMES = {"stock_gn"};
+    private static final String[] TBL_NAMES = {"user_info"};
 
     // 表名的前缀,从表生成代码时会去掉前缀
     private static final String TABLE_PREFIX = "tb_";

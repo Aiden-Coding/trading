@@ -1,4 +1,16 @@
 
+drop table if exists `user_info`;
+CREATE TABLE `user_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `username` varchar(50) DEFAULT NULL COMMENT '用户名',
+  `realName` varchar(50) DEFAULT NULL COMMENT '真实名字',
+  `avatar` varchar(50) DEFAULT NULL COMMENT '头像',
+  `desc` varchar(50) DEFAULT NULL COMMENT '介绍',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户';
+
 drop table if exists `stock_group`;
 CREATE TABLE `stock_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
