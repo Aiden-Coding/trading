@@ -1,12 +1,13 @@
 package com.aiden.trading.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.aiden.trading.dto.Result;
+import com.aiden.trading.dto.user.res.UserInfoModelResp;
+import com.aiden.trading.service.IUserInfoService;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * <p>
@@ -20,13 +21,13 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserInfoController {
 
+    @Resource
+    private IUserInfoService userInfoService;
 
     // 查询登录状态，浏览器访问： http://localhost:8081/user/isLogin
     @GetMapping("getUserInfo")
-    public Result<?> getUserInfo() {
-        Map<String,String> ret = new HashMap<>();
-        ret.put("username","hell");
-        ret.put("realName","helwl");
+    public Result<UserInfoModelResp> getUserInfo() {
+        UserInfoModelResp ret = userInfoService.getUserInfoModel(Integer.valueOf((String) StpUtil.getLoginId()));
         return Result.data(ret);
     }
 }

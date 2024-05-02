@@ -5,34 +5,36 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.aiden.trading.dto.Result;
 import com.aiden.trading.dto.user.req.LoginReq;
+import com.aiden.trading.entity.UserInfo;
+import com.aiden.trading.service.IUserInfoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "认证")
 public class UserAuthController {
 
-    // 测试登录，浏览器访问： http://localhost:8081/user/doLogin?username=zhang&password=123456
+    @Resource
+    private IUserInfoService userInfoService;
+
     @PostMapping("doLogin")
     public Result<?> doLogin(@RequestBody LoginReq loginReq) {
-        // 此处仅作模拟示例，真实项目需要从数据库中查询数据进行比对
-        if("vben".equals(loginReq.getUsername()) && "123456".equals(loginReq.getPassword())) {
-            StpUtil.login(10001);
-            // 第2步，获取 Token  相关参数
-            SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
-            return Result.data(tokenInfo);
-        }
-        return Result.error("登录失败");
+        List<UserInfo> users = userInfoService.getUserInfos(loginReq.getUsername());
+        UserInfo loginUser = userInfoService.validUser(users,loginReq);
+        StpUtil.login(loginUser.getId());
+        SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+        return Result.data(tokenInfo);
     }
 
-    // 查询登录状态，浏览器访问： http://localhost:8081/user/isLogin
     @GetMapping("isLogin")
-    public String isLogin() {
-        return "当前会话是否登录：" + StpUtil.isLogin();
+    public Boolean isLogin() {
+        return  StpUtil.isLogin();
     }
 
-    // 测试注销  ---- http://localhost:8081/acc/logout
     @GetMapping("doLogout")
     public SaResult logout() {
         StpUtil.logout();
