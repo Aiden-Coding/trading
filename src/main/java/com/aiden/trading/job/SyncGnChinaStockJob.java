@@ -92,6 +92,10 @@ public class SyncGnChinaStockJob implements JobService {
                         args1.put("symbol",(String) dataItem.get("代码"));
                         @SuppressWarnings("unchecked")
                         AkResult<List<Map<String, Object>>> ret1 = (AkResult<List<Map<String, Object>>>) aKshareApi.pyMethod(akShareReq1);
+
+                        LambdaQueryWrapper<StockGnItem> queryWrapper221 = new LambdaQueryWrapper<>();
+                        queryWrapper221.eq(StockGnItem::getGnId, stockInfo.getId());
+                        stockGnItemService.remove(queryWrapper221);
                         if (Objects.equals(ret1.getCode(), 0)) {
                             if (CollectionUtils.isNotEmpty(ret1.getData())) {
                                 for (Map<String, Object> dataItem1 : ret1.getData()) {
