@@ -33,6 +33,10 @@ public class UserInfo extends BaseEntity {
     @TableField("username")
     private String username;
 
+    @Schema(description = "用户名")
+    @TableField("`password`")
+    private String password;
+
     @Schema(description = "真实名字")
     @TableField("realName")
     private String realName;

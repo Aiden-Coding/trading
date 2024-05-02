@@ -3,6 +3,7 @@ drop table if exists `user_info`;
 CREATE TABLE `user_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `username` varchar(50) DEFAULT NULL COMMENT '用户名',
+  `password` varchar(50) DEFAULT NULL COMMENT '用户名',
   `realName` varchar(50) DEFAULT NULL COMMENT '真实名字',
   `avatar` varchar(50) DEFAULT NULL COMMENT '头像',
   `desc` varchar(50) DEFAULT NULL COMMENT '介绍',
