@@ -30,8 +30,8 @@ public class UserAuthController {
         return Result.data(tokenInfo);
     }
 
-    @GetMapping("isLogin")
-    public Result<Boolean> isLogin() {
+    @GetMapping("isLoginSystem")
+    public Result<Boolean> isLoginSystem() {
         return Result.data(StpUtil.isLogin());
     }
 
