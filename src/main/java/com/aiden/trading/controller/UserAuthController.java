@@ -24,15 +24,15 @@ public class UserAuthController {
     @PostMapping("doLogin")
     public Result<?> doLogin(@RequestBody LoginReq loginReq) {
         List<UserInfo> users = userInfoService.getUserInfos(loginReq.getUsername());
-        UserInfo loginUser = userInfoService.validUser(users,loginReq);
+        UserInfo loginUser = userInfoService.validUser(users, loginReq);
         StpUtil.login(loginUser.getId());
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
         return Result.data(tokenInfo);
     }
 
     @GetMapping("isLogin")
-    public Boolean isLogin() {
-        return  StpUtil.isLogin();
+    public Result<Boolean> isLogin() {
+        return Result.data(StpUtil.isLogin());
     }
 
     @GetMapping("doLogout")
