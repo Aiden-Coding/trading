@@ -8,9 +8,6 @@ import com.aiden.trading.dto.user.req.LoginReq;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "认证")
@@ -36,14 +33,8 @@ public class AuthController {
         return "当前会话是否登录：" + StpUtil.isLogin();
     }
 
-    // 查询 Token 信息  ---- http://localhost:8081/acc/tokenInfo
-    @GetMapping("tokenInfo")
-    public SaResult tokenInfo() {
-        return SaResult.data(StpUtil.getTokenInfo());
-    }
-
     // 测试注销  ---- http://localhost:8081/acc/logout
-    @GetMapping("logout")
+    @GetMapping("doLogout")
     public SaResult logout() {
         StpUtil.logout();
         return SaResult.ok();
