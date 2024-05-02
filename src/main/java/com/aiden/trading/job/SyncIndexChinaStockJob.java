@@ -50,6 +50,7 @@ public class SyncIndexChinaStockJob implements JobService {
                         stockInfo.setCode((String) dataItem.get("index_code"));
                         stockInfo.setCode((String) dataItem.get("index_code"));
                         stockInfo.setThsCode((String) dataItem.get("ths_code"));
+                        stockInfo.setName((String) dataItem.get("index_name"));
                         StockInfo stock = stockInfoService.getOne(queryWrapper);
                         if (Objects.nonNull(stock)) {
                             stockInfo.setId(stock.getId());
