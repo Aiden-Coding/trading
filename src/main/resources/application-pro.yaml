@@ -10,7 +10,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       # 数据库
-      url: jdbc:mysql://172.25.160.1:8003/trading?useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull&useSSL=true
+      url: jdbc:mysql://192.168.0.208:8003/trading?useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull&useSSL=true
       username: root
       password: 123456
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -58,7 +58,7 @@ spring:
             class: org.quartz.simpl.SimpleThreadPool
   data:
     redis:
-      host: 172.25.160.1
+      host: 192.168.0.208
       port: 8018
       database: 1
       password: ningzaichun
@@ -71,7 +71,7 @@ spring:
           max-idle: 8     # 最大空闲连接，默认8
           min-idle: 0     # 最小空闲连接，默认0
   kafka:
-    bootstrap-servers: 172.25.160.1:9093 # kafka集群信息，多个用逗号间隔
+    bootstrap-servers: 192.168.0.208:9093 # kafka集群信息，多个用逗号间隔
     # 生产者
     producer:
       # 重试次数，设置大于0的值，则客户端会将发送失败的记录重新发送
@@ -161,7 +161,7 @@ knife4j:
 #    password: 123456
 
 dolphindb:
-  host_name: 172.25.160.1
+  host_name: 192.168.0.208
   port: 8031
   user_id: admin
   password: 123456
@@ -180,7 +180,7 @@ pagehelper:
   params: count=countSql
 
 remote:
-  baseUrl: http://172.25.160.1:8888
+  baseUrl: http://192.168.0.208:8888
 
 
 
