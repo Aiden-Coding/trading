@@ -75,6 +75,7 @@ services:
   kafka:
     image: 'bitnami/kafka:latest'
     container_name: kafka
+    restart: always
     ports:
       - "9092:9092"
       - "9093:9093"
@@ -96,7 +97,7 @@ services:
       - KAFKA_CFG_LISTENERS=CONTROLLER://:9094,BROKER://:9092,EXTERNAL://:9093
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,BROKER:PLAINTEXT,EXTERNAL:PLAINTEXT
       # 注意EXTERNAL配置的是当前Docker所在的主机地址,BROKER可以使用Docker内部的网络地址即可
-      - KAFKA_CFG_ADVERTISED_LISTENERS=BROKER://kafka:9092,EXTERNAL://172.25.160.1:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=BROKER://kafka:9092,EXTERNAL://192.168.137.1:9093
       # 内部各个broker之间通信用的listener
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=BROKER
       # 用来进行选举的Controller服务器，如果有多个Controller则都需要写上，这里本机
@@ -109,6 +110,7 @@ services:
   kafka-ui:
     container_name: kafka-ui
     image: provectuslabs/kafka-ui:latest
+    restart: always
     ports:
       - "9095:8080"
     depends_on:
