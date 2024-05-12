@@ -71,7 +71,7 @@ spring:
           max-idle: 8     # 最大空闲连接，默认8
           min-idle: 0     # 最小空闲连接，默认0
   kafka:
-    bootstrap-servers: 127.0.0.1:9093 # kafka集群信息，多个用逗号间隔
+    bootstrap-servers: 192.168.137.1:9093 # kafka集群信息，多个用逗号间隔
     # 生产者
     producer:
       # 重试次数，设置大于0的值，则客户端会将发送失败的记录重新发送
@@ -92,7 +92,7 @@ spring:
     # 消费者
     consumer:
       # 消费者组
-      group-id: test-group
+      group-id: test-group1
       # 是否自动提交
       enable-auto-commit: false
       # 消费偏移配置

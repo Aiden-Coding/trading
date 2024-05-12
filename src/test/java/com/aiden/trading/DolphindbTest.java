@@ -7,6 +7,7 @@ import com.xxdb.comm.ErrorCodeInfo;
 import com.xxdb.comm.SqlStdEnum;
 import com.xxdb.data.*;
 import com.xxdb.multithreadedtablewriter.MultithreadedTableWriter;
+import com.xxdb.route.AutoFitTableUpsert;
 import com.xxdb.route.PartitionedTableAppender;
 import com.xxdb.streaming.client.*;
 import org.junit.jupiter.api.Test;
@@ -346,6 +347,42 @@ public class DolphindbTest {
             }
             System.out.print("\n");
         }
+    }
+    @Test
+    public void ts() throws Exception {
+        DBConnection conn = new DBConnection(false, false, false);
+        conn.connect("127.0.0.1", 8031, "admin", "123456");
+        String dbName ="dfs://upsertTable";
+        String tableName = "pt";
+//        String script = "dbName = \"dfs://upsertTable\"\n"+
+//                "if(exists(dbName)){\n"+
+//                "\tdropDatabase(dbName)\t\n"+
+//                "}\n"+
+//                "db  = database(dbName, RANGE,1 10000)\n"+
+//                "t = table(1000:0, `id`value,[ INT, INT])\n"+
+//                "pt = db.createPartitionedTable(t,`pt,`id)";
+//        conn.run(script);
+
+        BasicIntVector v1 = new BasicIntVector(List.of(1));
+        BasicIntVector v2 = new BasicIntVector(List.of(1));
+
+        BasicArrayVector ba = new BasicArrayVector(Entity.DATA_TYPE.DT_INT_ARRAY, 1);
+        ba.Append(v1);
+        ba.Append(v1);
+        ba.Append(v1);
+
+        List<String> colNames = new ArrayList<>();
+        colNames.add("id");
+        colNames.add("value");
+        List<Vector> cols = new ArrayList<>();
+        cols.add(v1);
+        cols.add(v2);
+        BasicTable bt = new BasicTable(colNames, cols);
+        String[] keyColName = new String[]{"id"};
+        AutoFitTableUpsert aftu = new AutoFitTableUpsert(dbName, tableName, conn, false, keyColName, null);
+        aftu.upsert(bt);
+        BasicTable res = (BasicTable) conn.run("select * from loadTable('dfs://upsertTable','pt');");
+        System.out.println(res.getString());
     }
 
 }
